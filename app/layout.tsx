@@ -4,6 +4,7 @@ import "./globals.css";
 import SideBarMenu from "../components/sidebar/SideBarMenu";
 import ReduxProvider from "../reduxStore/Provider";
 import MaterialProvider from "@/materialUI/Provider";
+import InlineScript from "./InlineScript";
 
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`;
 
@@ -35,7 +36,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <InlineScript html={themeScript} />
       </head>
       <body className="min-h-full flex flex-col">
         <ReduxProvider>

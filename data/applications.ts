@@ -11,12 +11,14 @@ export interface AppPage {
 
 export interface AppGroup {
   name: string;
+  filter:'movies' | 'series' | 'other';
   pages: AppPage[];
 }
 
 export const applications: AppGroup[] = [
   {
     name: "Movies",
+    filter: 'movies',
     pages: [
       {
         name: "Watched",
@@ -42,6 +44,7 @@ export const applications: AppGroup[] = [
   },
   {
     name: "Series",
+    filter: 'series',
     pages: [
       {
         name: "Watched",
@@ -72,6 +75,7 @@ export const applications: AppGroup[] = [
   },
   {
     name: "Other",
+    filter: 'other',
     pages: [
       {
         name: "Calendar",
