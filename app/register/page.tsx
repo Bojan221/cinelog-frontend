@@ -48,7 +48,6 @@ function page() {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // clear the error for this field as the user edits it
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
@@ -69,8 +68,6 @@ function page() {
     }
 
     setErrors({});
-    // result.data is fully validated and typed here
-    console.log("Valid registration data:", result.data);
   };
 
   return (
@@ -140,7 +137,7 @@ function page() {
           </div>
 
 
-          <div className="overflow-y-auto bg-[#0d0d0f] p-8 sleek-scrollbar">
+          <div className="min-h-0 overflow-y-auto bg-[#0d0d0f] p-8 sleek-scrollbar">
             <div className="mx-auto w-full max-w-md">
               <div className="text-center">
                 <h2 className="text-2xl font-bold">Create Account</h2>
