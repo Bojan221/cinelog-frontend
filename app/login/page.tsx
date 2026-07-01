@@ -4,8 +4,9 @@ import Logo from "@/components/core/Logo";
 import {
   FaRegStar,
   FaRegBookmark,
-  FaRegUser,
   FaRegEye,
+  FaRegEyeSlash,
+  FaApple,
 } from "react-icons/fa";
 import { IoStatsChartSharp } from "react-icons/io5";
 import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
@@ -13,28 +14,20 @@ import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { registerSchema } from "./schema";
+import { loginSchema } from "./schema";
 import { useAppDispatch } from "@/reduxStore/hooks";
-import { registerUser } from "@/reduxStore/authSlice";
+import { loginUser } from "@/reduxStore/authSlice";
 
 type FormValues = {
-  firstName: string;
-  lastName: string;
-  username: string;
   email: string;
   password: string;
-  confirmPassword: string;
 };
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
 
 const initialValues: FormValues = {
-  firstName: "",
-  lastName: "",
-  username: "",
   email: "",
   password: "",
-  confirmPassword: "",
 };
 
 function page() {
@@ -44,15 +37,11 @@ function page() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, type, value, checked } = e.target;
-    setValues((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
     setServerError(null);
   };
@@ -60,7 +49,7 @@ function page() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setServerError(null);
-    const result = registerSchema.safeParse(values);
+    const result = loginSchema.safeParse(values);
 
     if (!result.success) {
       const fieldErrors: FormErrors = {};
@@ -78,20 +67,11 @@ function page() {
     setSubmitting(true);
     try {
       await dispatch(
-        registerUser({
-          firstName: result.data.firstName,
-          lastName: result.data.lastName,
-          username: result.data.username,
-          email: result.data.email,
-          password: result.data.password,
-        })
+        loginUser({ email: result.data.email, password: result.data.password })
       ).unwrap();
-      // Registration doesn't log the user in — send them to login.
-      router.push("/login");
+      router.push("/");
     } catch (err) {
-      setServerError(
-        typeof err === "string" ? err : "Failed to create account"
-      );
+      setServerError(typeof err === "string" ? err : "Login failed");
     } finally {
       setSubmitting(false);
     }
@@ -99,16 +79,14 @@ function page() {
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-[#0a0a0b] text-white">
-
       <div className="absolute top-5 left-8 z-20">
         <Logo size="lg" />
       </div>
 
       <div className="mx-auto flex h-screen max-w-6xl items-center px-6 pt-16 pb-6">
         <div className="grid max-h-full w-full overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-2">
-
+          {/* Left promo panel */}
           <div className="relative flex flex-col justify-center p-8">
-
             <div
               className="absolute inset-0 bg-cover bg-center"
               style={{ backgroundImage: "url('/registerbg.jpg')" }}
@@ -117,10 +95,10 @@ function page() {
 
             <div className="relative z-10 max-w-md">
               <h1 className="text-4xl font-bold tracking-tight">
-                Join Cine<span className="text-red-500">Log</span>
+                Welcome back to Cine<span className="text-red-500">Log</span>
               </h1>
               <p className="mt-3 text-lg text-neutral-300">
-                Create your account and start tracking your favorite movies.
+                Log in to pick up right where you left off.
               </p>
 
               <div className="mt-8 flex flex-col gap-6">
@@ -129,9 +107,9 @@ function page() {
                     <FaRegBookmark size={22} className="text-red-500" />
                   </div>
                   <div>
-                    <span className="font-semibold">Track Your Watchlist</span>
+                    <span className="font-semibold">Your Watchlist</span>
                     <p className="mt-1 text-sm text-neutral-300">
-                      Save and organize movies you want to watch.
+                      Everything you saved, ready to watch.
                     </p>
                   </div>
                 </div>
@@ -141,9 +119,9 @@ function page() {
                     <FaRegStar size={22} className="text-red-500" />
                   </div>
                   <div>
-                    <span className="font-semibold">Rate &amp; Review</span>
+                    <span className="font-semibold">Ratings &amp; Reviews</span>
                     <p className="mt-1 text-sm text-neutral-300">
-                      Share your thoughts and see what others think.
+                      Continue sharing your thoughts on films.
                     </p>
                   </div>
                 </div>
@@ -153,9 +131,9 @@ function page() {
                     <IoStatsChartSharp size={22} className="text-red-500" />
                   </div>
                   <div>
-                    <span className="font-semibold">Movie Stats</span>
+                    <span className="font-semibold">Your Movie Stats</span>
                     <p className="mt-1 text-sm text-neutral-300">
-                      Analyze your movie journey with detailed stats.
+                      Track your journey with detailed stats.
                     </p>
                   </div>
                 </div>
@@ -163,13 +141,13 @@ function page() {
             </div>
           </div>
 
-
+          {/* Right form panel */}
           <div className="min-h-0 overflow-y-auto bg-[#0d0d0f] p-8 sleek-scrollbar">
             <div className="mx-auto w-full max-w-md">
               <div className="text-center">
-                <h2 className="text-2xl font-bold">Create Account</h2>
+                <h2 className="text-2xl font-bold">Sign In</h2>
                 <p className="mt-1 text-sm text-neutral-400">
-                  Fill in your details to get started
+                  Enter your credentials to access your account
                 </p>
               </div>
 
@@ -178,78 +156,11 @@ function page() {
                 onSubmit={handleSubmit}
                 noValidate
               >
-                {/* First / Last name */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm text-neutral-300">First Name</label>
-                    <div className="relative">
-                      <FaRegUser className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
-                      <input
-                        type="text"
-                        name="firstName"
-                        value={values.firstName}
-                        onChange={handleChange}
-                        placeholder="First name"
-                        className={`w-full rounded-lg border bg-white/3 py-2.5 pl-11 pr-4 text-sm placeholder:text-neutral-500 focus:outline-none ${
-                          errors.firstName
-                            ? "border-red-500/80 focus:border-red-500"
-                            : "border-white/10 focus:border-red-500/60"
-                        }`}
-                      />
-                    </div>
-                    {errors.firstName && (
-                      <p className="text-xs text-red-400">{errors.firstName}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-sm text-neutral-300">Last Name</label>
-                    <div className="relative">
-                      <FaRegUser className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={values.lastName}
-                        onChange={handleChange}
-                        placeholder="Last name"
-                        className={`w-full rounded-lg border bg-white/3 py-2.5 pl-11 pr-4 text-sm placeholder:text-neutral-500 focus:outline-none ${
-                          errors.lastName
-                            ? "border-red-500/80 focus:border-red-500"
-                            : "border-white/10 focus:border-red-500/60"
-                        }`}
-                      />
-                    </div>
-                    {errors.lastName && (
-                      <p className="text-xs text-red-400">{errors.lastName}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* Username */}
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm text-neutral-300">Username</label>
-                  <div className="relative">
-                    <FaRegUser className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
-                    <input
-                      type="text"
-                      name="username"
-                      value={values.username}
-                      onChange={handleChange}
-                      placeholder="Choose a username"
-                      className={`w-full rounded-lg border bg-white/3 py-2.5 pl-11 pr-4 text-sm placeholder:text-neutral-500 focus:outline-none ${
-                        errors.username
-                          ? "border-red-500/80 focus:border-red-500"
-                          : "border-white/10 focus:border-red-500/60"
-                      }`}
-                    />
-                  </div>
-                  {errors.username && (
-                    <p className="text-xs text-red-400">{errors.username}</p>
-                  )}
-                </div>
-
                 {/* Email */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm text-neutral-300">Email Address</label>
+                  <label className="text-sm text-neutral-300">
+                    Email Address
+                  </label>
                   <div className="relative">
                     <HiOutlineMail className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
                     <input
@@ -276,11 +187,11 @@ function page() {
                   <div className="relative">
                     <HiOutlineLockClosed className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
                     <input
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       name="password"
                       value={values.password}
                       onChange={handleChange}
-                      placeholder="Create a password"
+                      placeholder="Enter your password"
                       className={`w-full rounded-lg border bg-white/3 py-2.5 pl-11 pr-11 text-sm placeholder:text-neutral-500 focus:outline-none ${
                         errors.password
                           ? "border-red-500/80 focus:border-red-500"
@@ -289,47 +200,16 @@ function page() {
                     />
                     <button
                       type="button"
+                      onClick={() => setShowPassword((s) => !s)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300"
                     >
-                      <FaRegEye />
+                      {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
                     </button>
                   </div>
                   {errors.password && (
                     <p className="text-xs text-red-400">{errors.password}</p>
                   )}
                 </div>
-
-                {/* Confirm Password */}
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm text-neutral-300">Confirm Password</label>
-                  <div className="relative">
-                    <HiOutlineLockClosed className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500" />
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={values.confirmPassword}
-                      onChange={handleChange}
-                      placeholder="Confirm your password"
-                      className={`w-full rounded-lg border bg-white/3 py-2.5 pl-11 pr-11 text-sm placeholder:text-neutral-500 focus:outline-none ${
-                        errors.confirmPassword
-                          ? "border-red-500/80 focus:border-red-500"
-                          : "border-white/10 focus:border-red-500/60"
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-300"
-                    >
-                      <FaRegEye />
-                    </button>
-                  </div>
-                  {errors.confirmPassword && (
-                    <p className="text-xs text-red-400">
-                      {errors.confirmPassword}
-                    </p>
-                  )}
-                </div>
-
                 {serverError && (
                   <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-400">
                     {serverError}
@@ -342,14 +222,16 @@ function page() {
                   disabled={submitting}
                   className="mt-1 w-full cursor-pointer rounded-lg bg-red-600 py-2.5 font-semibold transition-colors hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {submitting ? "Creating account..." : "Create Account"}
+                  {submitting ? "Signing in..." : "Sign In"}
                 </button>
               </form>
 
               {/* Divider */}
               <div className="my-4 flex items-center gap-4">
                 <div className="h-px flex-1 bg-white/10" />
-                <span className="text-sm text-neutral-500">or continue with</span>
+                <span className="text-sm text-neutral-500">
+                  or continue with
+                </span>
                 <div className="h-px flex-1 bg-white/10" />
               </div>
 
@@ -366,12 +248,12 @@ function page() {
 
               {/* Footer */}
               <p className="mt-4 text-center text-sm text-neutral-400">
-                Already have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
-                  href="/login"
+                  href="/register"
                   className="font-semibold text-red-500 hover:underline"
                 >
-                  Log in
+                  Sign up
                 </Link>
               </p>
             </div>

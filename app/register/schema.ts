@@ -41,9 +41,6 @@ export const registerSchema = z
       .regex(/[A-Z]/, "Password must contain an uppercase letter")
       .regex(/[0-9]/, "Password must contain a number"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    terms: z.literal(true, {
-      message: "You must accept the Terms of Service and Privacy Policy",
-    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
