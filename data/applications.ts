@@ -1,7 +1,9 @@
 import type { IconType } from "react-icons";
 import { FaRegBookmark, FaRegHeart, FaList } from "react-icons/fa";
 import { FaRegCircleCheck, FaRegCalendar, FaChartColumn, FaGear } from "react-icons/fa6";
-import { RiProgress5Line } from "react-icons/ri";
+import { RiProgress5Line} from "react-icons/ri";
+import { BsCollectionPlayFill } from "react-icons/bs";
+
 
 export interface AppPage {
   name: string;
@@ -20,6 +22,11 @@ export const applications: AppGroup[] = [
     name: "Movies",
     filter: 'movies',
     pages: [
+      {
+        name:"All Movies",
+        link:"/movies/all",
+        icon: BsCollectionPlayFill,
+      },
       {
         name: "Watched",
         link: "/movies/watched",
@@ -46,6 +53,11 @@ export const applications: AppGroup[] = [
     name: "Series",
     filter: 'series',
     pages: [
+      {
+        name:"All Series",
+        link:"/series/all",
+        icon: BsCollectionPlayFill,
+      },
       {
         name: "Watched",
         link: "/series/watched",
