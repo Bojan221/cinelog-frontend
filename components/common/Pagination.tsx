@@ -28,11 +28,40 @@ export default function PaginationRounded({
   return (
     <Stack spacing={2}>
       <Pagination
-        count={totalPages}
+        count={totalPages > 500 ? 500 : totalPages}
         page={currentPage}
         onChange={handlePageChange}
         variant="outlined"
         shape="rounded"
+        siblingCount={1}
+        boundaryCount={1}
+        sx={{
+          "& .MuiPaginationItem-root": {
+            color: "currentColor",
+            borderColor: "currentColor",
+            opacity: 0.55,
+            fontWeight: 500,
+            transition: "all .15s ease",
+            "&:hover": {
+              opacity: 1,
+              backgroundColor: "rgba(127,127,127,0.12)",
+            },
+          },
+          "& .MuiPaginationItem-root.Mui-selected": {
+            opacity: 1,
+            color: "#fff",
+            backgroundColor: "var(--pg-accent, #6366f1)",
+            borderColor: "var(--pg-accent, #6366f1)",
+            fontWeight: 600,
+            "&:hover": {
+              backgroundColor: "var(--pg-accent-hover, #4f46e5)",
+            },
+          },
+          "& .MuiPaginationItem-ellipsis": {
+            color: "currentColor",
+            opacity: 0.55,
+          },
+        }}
       />
     </Stack>
   );

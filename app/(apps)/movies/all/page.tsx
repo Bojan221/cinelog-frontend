@@ -1,33 +1,46 @@
-'use client'
+import { serverFetch } from "@/app/api/serverFetch";
+import MovieList from "@/components/common/MovieList";
+import Loading from "@/components/core/Loading";
+import { Suspense } from "react";
 
-import {useState, useEffect} from 'react';
-import axiosPrivate from '@/app/api/axiosPrivate';
-import PaginationRounded from '@/components/common/Pagination';
-import MovieCard from '@/components/common/MovieCard';
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
 
-function page() {
-  
-  const[movies,setMovies]= useState<any[]>([])
-
-  useEffect(()=> { 
-    const fetchMovies = async() => {
-      try {
-        const response = await axiosPrivate.get('/movies/allMovies');
-        setMovies(response.data.data.results)
-        
-      } catch (error) {
-        console.log(error)
-      } 
-    }
-    fetchMovies()
-  },[])  
+export default function page({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   return (
-    <div className='grid grid-cols-10 gap-4'>
-      {movies && movies.map((movie:any) => { 
-        return (<MovieCard movie={movie} key={movie.id}/>)
-      })}
-    </div>
-  )
+    <Suspense fallback={<Loading />}>
+      <AllMovies searchParams={searchParams} />
+    </Suspense>
+  );
 }
 
-export default page
+async function AllMovies({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const defaultParams = {
+    page: "1",
+  };
+  const params = { ...defaultParams, ...resolvedSearchParams };
+  const queryParams = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value) {
+      queryParams.append(key, value);
+    }
+  });
+
+  let moviesData = { page: 0, movies: [], totalPages: 0 };
+  try {
+    moviesData = await serverFetch(`/movies/allMovies?${queryParams.toString()}`);
+  } catch (err) {
+    console.error(err);
+  }
+  return <MovieList moviesData={moviesData} />;
+}
