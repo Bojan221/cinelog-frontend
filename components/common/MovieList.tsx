@@ -23,7 +23,7 @@ function MovieGrid({ moviesData }: Props) {
   if (isPending) {
     return <MovieListLoader overlay />;
   }
-
+  
   return (
     <div
       className="grid w-full gap-6 p-5"
@@ -42,7 +42,6 @@ function MovieGrid({ moviesData }: Props) {
     </div>
   );
 }
-
 function MovieList({ moviesData }: Props) {
   return (
     <NavigationProvider>

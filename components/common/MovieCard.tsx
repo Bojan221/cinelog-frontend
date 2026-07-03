@@ -22,13 +22,20 @@ function MovieCard({ movie, loading }: CardProps) {
             alt={movie.title ?? String(movie.tmdbId)}
             fill
             sizes="(max-width: 768px) 45vw, 224px"
-            src={`${POST_URL}${movie.poster}`}
-            className="object-cover transition duration-300 group-hover:scale-[1.03]"
+            src={`${POST_URL}${movie.poster ? movie.poster : movie.backdrop}`}
+            className="object-cover transition duration-300 group-hover:scale-[1.03] cursor-pointer"
             loading={loading}
-            onClick={() => dispatch(openPreview({ content: `movie-${movie.tmdbId}` }))}
+            onClick={() =>
+              dispatch(openPreview({ content: `movie-${movie.tmdbId}` }))
+            }
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-sm text-black/40 dark:text-white/40">
+          <div
+            className="flex h-full w-full items-center justify-center text-sm text-black/40 dark:text-white/40 cursor-pointer"
+            onClick={() =>
+              dispatch(openPreview({ content: `movie-${movie.tmdbId}` }))
+            }
+          >
             No image
           </div>
         )}

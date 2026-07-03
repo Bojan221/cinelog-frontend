@@ -22,6 +22,7 @@ function SearchInput({ placeholder }: Props) {
 
   const handleSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
+    setSearchValue(searchValue.trim())
     if (searchValue) {
       params.set("search", searchValue);
       params.set("page","1");
@@ -48,7 +49,7 @@ function SearchInput({ placeholder }: Props) {
       <input
         placeholder={placeholder}
         value={searchValue}
-        onChange={(e) => setSearchValue(e.target.value.trim())}
+        onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
         className="w-75 rounded-lg bg-black/5 py-2 pr-8 pl-8 text-black placeholder:text-black/40 focus:outline focus:outline-red-400/60 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40"
       />

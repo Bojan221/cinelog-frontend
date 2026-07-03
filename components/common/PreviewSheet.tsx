@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { closePreview, openPreview } from "@/reduxStore/previewSheetSlice";
 import MovieSheet from "./MovieSheet";
+import { MovieLoader } from "../core/SheetLoader";
 
 function PreviewSheet() {
   const { isOpen, previewContent } = useAppSelector((s) => s.previewSheet);
@@ -41,7 +42,7 @@ function PreviewSheet() {
     dispatch(closePreview());
     const urlParams = new URLSearchParams(searchParams.toString());
     urlParams.delete("preview");
-    router.push(`${pathname}?${urlParams.toString()}`);
+    router.push(`${pathname}?${urlParams.toString()}`, { scroll: false });
   };
 
   const renderContent = () => { 
@@ -49,7 +50,7 @@ function PreviewSheet() {
         case 'movie':
             return <MovieSheet movieId={previewId || null}/>;
         default :
-        return <p>No Preview Content Fount</p>
+        return <MovieLoader/>
     } 
   }
 
