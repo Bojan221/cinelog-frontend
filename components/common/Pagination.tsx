@@ -2,7 +2,8 @@
 
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useNavigation } from "@/components/common/NavigationContext";
 
 interface PaginationProps {
   totalPages: number;
@@ -13,7 +14,7 @@ export default function PaginationRounded({
   totalPages,
   currentPage,
 }: PaginationProps) {
-  const router = useRouter();
+  const { navigate } = useNavigation();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -23,7 +24,7 @@ export default function PaginationRounded({
   ) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", value.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    navigate(`${pathname}?${params.toString()}`);
   };
   return (
     <Stack spacing={2}>

@@ -1,5 +1,5 @@
 import SideBarMenu from "../../components/sidebar/SideBarMenu";
-
+import PreviewSheet from "@/components/common/PreviewSheet";
 export default function AppsLayout({
   children,
 }: Readonly<{
@@ -8,6 +8,7 @@ export default function AppsLayout({
   return (
     <div className="flex">
       <SideBarMenu />
+      <PreviewSheet/>
       {children}
     </div>
   );

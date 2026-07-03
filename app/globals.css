@@ -3,6 +3,12 @@
 /* Setting up dark mode. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* Always reserve space for the vertical scrollbar so the layout doesn't
+   shift horizontally when it appears/disappears on refresh. */
+html {
+  scrollbar-gutter: stable;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #1b1b1d;

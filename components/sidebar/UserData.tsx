@@ -25,8 +25,11 @@ function UserData() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const user = useAppSelector((s) => s.auth.user);
+  const initialized = useAppSelector((s) => s.auth.initialized);
 
-  const fullName = user
+  const fullName = !initialized
+    ? ""
+    : user
     ? `${user.firstName} ${user.lastName}`.trim()
     : "Guest";
 

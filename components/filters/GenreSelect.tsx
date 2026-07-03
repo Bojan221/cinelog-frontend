@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import type { Genre } from "@/types/genre";
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { IoChevronDown, IoClose } from "react-icons/io5";
+import { useNavigation } from "@/components/common/NavigationContext";
 
 function GenreSelect() {
   const [isOpen, setIsOpen] = useState(false);
   const [genres, setGenres] = useState<Genre[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const { navigate } = useNavigation();
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
@@ -24,6 +25,7 @@ function GenreSelect() {
       try {
         const response = await axiosPrivate.get("/movies/movieGenres");
         setGenres(response.data.genres);
+        
       } catch (error) {
         console.log(error);
       }
@@ -50,7 +52,8 @@ function GenreSelect() {
     params.set("genre", value);
     params.set("page", "1");
     params.delete("search");
-    router.push(`${pathname}?${params.toString()}`);
+    params.delete("sort");
+    navigate(`${pathname}?${params.toString()}`);
     setIsOpen(false);
   };
 
@@ -59,16 +62,15 @@ function GenreSelect() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("genre");
     params.set("page", "1");
-    router.push(`${pathname}?${params.toString()}`);
+    navigate(`${pathname}?${params.toString()}`);
     setIsOpen(false);
   };
-
   return (
-    <div className="relative" ref={containerRef}>
+    <div className="relative w-50" ref={containerRef}>
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 rounded-lg bg-black/40 px-3 py-2 text-white/80 focus:outline focus:outline-red-400/60"
+        className="flex items-center gap-2 rounded-lg bg-black/5 px-3 py-2 text-black dark:bg-white/5 dark:text-white focus:outline focus:outline-red-400/60"
       >
         <span>Genre{activeGenre ? `: ${activeGenre.name}` : ""}</span>
         {activeGenre ? (
@@ -76,7 +78,7 @@ function GenreSelect() {
             role="button"
             aria-label="Clear genre"
             onClick={handleClear}
-            className="text-[15px] rounded-full hover:bg-white/10"
+            className="rounded-full text-[15px] hover:bg-black/10 dark:hover:bg-white/10"
           />
         ) : (
           <IoChevronDown
@@ -85,13 +87,13 @@ function GenreSelect() {
         )}
       </button>
       {isOpen && (
-        <div className="absolute z-10 mt-1 max-h-64 overflow-y-auto rounded-lg bg-black/90 text-white/80">
+        <div className="absolute z-10 mt-1 max-h-64 min-w-full overflow-x-hidden overflow-y-auto rounded-lg border border-black/10 bg-background text-black shadow-lg dark:border-white/10 dark:text-white [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-red-400/60 [&::-webkit-scrollbar-track]:bg-transparent">
           {genres?.map((genre) => (
             <div
               key={genre.id}
               onClick={() => handleSelect(genre.id.toString())}
-              className={`cursor-pointer px-3 py-2 hover:bg-white/10 ${
-                genre.id.toString() === currentGenre ? "text-red-400" : ""
+              className={`cursor-pointer px-3 py-2 hover:bg-black/5 dark:hover:bg-white/10 ${
+                genre.id.toString() === currentGenre ? "text-red-500 dark:text-red-400" : ""
               }`}
             >
               {genre.name}

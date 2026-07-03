@@ -1,6 +1,6 @@
-import { serverFetch } from "@/app/api/serverFetch";
+import { serverFetch, requireServerAuth } from "@/app/api/serverFetch";
 import MovieList from "@/components/common/MovieList";
-import Loading from "@/components/core/Loading";
+import MovieListLoader from "@/components/core/Loading";
 import { Suspense } from "react";
 
 export const revalidate = 0;
@@ -12,7 +12,7 @@ export default function page({
   searchParams: Promise<Record<string, string>>;
 }) {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<MovieListLoader firstLoad/>}>
       <AllMovies searchParams={searchParams} />
     </Suspense>
   );
@@ -23,6 +23,8 @@ async function AllMovies({
 }: {
   searchParams: Promise<Record<string, string>>;
 }) {
+  await requireServerAuth();
+
   const resolvedSearchParams = await searchParams;
   const defaultParams = {
     page: "1",

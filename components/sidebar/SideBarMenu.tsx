@@ -5,7 +5,7 @@ import UserData from "./UserData"
 
 function SideBarMenu() {
   return (
-    <div className="w-75 h-screen sticky top-0 flex flex-col border-r border-black/10 dark:border-white/10 bg-neutral-50 dark:bg-transparent">
+    <div className="w-85 h-screen sticky top-0 flex flex-col border-r border-black/10 dark:border-white/10 bg-neutral-50 dark:bg-transparent">
         <div className="px-6 py-4 flex items-center justify-between">
         <Logo size="lg"/>
         <ThemeToggle/>

@@ -22,6 +22,15 @@ function Avatar({ size, fullName, profilePicture }: AvatarProps) {
     xl: "text-lg",
   };
 
+  if (!fullName) {
+    return (
+      <div className="flex gap-2 items-center">
+        <div className={`rounded-full bg-foreground/10 animate-pulse ${sizeClasses[size]}`} />
+        <div className="h-4 w-24 rounded bg-foreground/10 animate-pulse" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex gap-2 items-center">
       {profilePicture ? (

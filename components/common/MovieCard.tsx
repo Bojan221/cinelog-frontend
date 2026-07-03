@@ -1,25 +1,31 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { FaStar, FaHeart, FaRegHeart } from "react-icons/fa";
-import { normalizeDate, formatRate } from "@/utils/formatters"; 
+import { FaStar, FaRegHeart } from "react-icons/fa";
+import { normalizeDate, formatRate } from "@/utils/formatters";
+import { Movie } from "@/types/movie";
+import { useAppDispatch } from "@/reduxStore/hooks";
+import { openPreview } from "@/reduxStore/previewSheetSlice";
+interface CardProps {
+  movie: Movie;
+  loading: "eager" | "lazy";
+}
 
-function MovieCard({ movie,loading }: { movie: any,loading:"eager" | "lazy" }) {
+function MovieCard({ movie, loading }: CardProps) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
-  const [favorite, setFavorite] = useState<boolean>(!!movie.favorite);
-
+  const dispatch = useAppDispatch();
   return (
     <div className="group flex flex-col gap-3 border rounded-xl border-black/10 dark:border-white/10">
       <div className="relative aspect-2/3 w-full overflow-hidden rounded-xl bg-black/5 ring-1 ring-black/10 transition duration-300 group-hover:ring-black/25 group-hover:shadow-lg group-hover:shadow-black/20 dark:bg-white/5 dark:ring-white/10 dark:group-hover:ring-white/25 dark:group-hover:shadow-black/40">
-        {movie.poster_path ? (
+        {movie.poster ? (
           <Image
-            alt={movie.title ?? String(movie.id)}
+            alt={movie.title ?? String(movie.tmdbId)}
             fill
             sizes="(max-width: 768px) 45vw, 224px"
-            src={`${POST_URL}${movie.poster_path}`}
+            src={`${POST_URL}${movie.poster}`}
             className="object-cover transition duration-300 group-hover:scale-[1.03]"
             loading={loading}
+            onClick={() => dispatch(openPreview({ content: `movie-${movie.tmdbId}` }))}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-sm text-black/40 dark:text-white/40">
@@ -31,19 +37,10 @@ function MovieCard({ movie,loading }: { movie: any,loading:"eager" | "lazy" }) {
 
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setFavorite((f) => !f);
-          }}
-          aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
+          aria-label={"Add to favorites"}
           className="absolute right-2.5 top-2.5 grid h-9 w-9 place-items-center rounded-full bg-black/40 text-white backdrop-blur-sm transition hover:bg-black/60"
         >
-          {favorite ? (
-            <FaHeart className="text-red-500" size={16} />
-          ) : (
-            <FaRegHeart className="text-white" size={16} />
-          )}
+          <FaRegHeart className="text-white" size={16} />
         </button>
       </div>
 
@@ -52,17 +49,21 @@ function MovieCard({ movie,loading }: { movie: any,loading:"eager" | "lazy" }) {
           {movie.title ?? "Untitled"}
         </h3>
 
-        {movie.vote_average !== null && (
+        {movie.vote !== null && (
           <div className="flex items-center gap-1.5 text-sm">
             <FaStar className="text-amber-500 dark:text-amber-400" size={14} />
             <span className="font-medium text-black/80 dark:text-white/90">
-              {formatRate(movie.vote_average)}
+              {formatRate(movie.vote)}
             </span>
             <span className="text-black/40 dark:text-white/40">/10</span>
           </div>
         )}
- 
-        {movie.release_date && <p className="text-xs text-black/50 dark:text-white/50">{normalizeDate(movie.release_date)}</p>}
+
+        {movie.releaseDate && (
+          <p className="text-xs text-black/50 dark:text-white/50">
+            {normalizeDate(movie.releaseDate)}
+          </p>
+        )}
       </div>
     </div>
   );

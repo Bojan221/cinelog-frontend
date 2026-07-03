@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { IoMdClose } from "react-icons/io";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useNavigation } from "@/components/common/NavigationContext";
 interface Props {
   placeholder: string;
 }
 
 function SearchInput({ placeholder }: Props) {
-  const router = useRouter();
+  const { navigate } = useNavigation();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchParam = searchParams.get("search") || "";
@@ -24,23 +26,38 @@ function SearchInput({ placeholder }: Props) {
       params.set("search", searchValue);
       params.set("page","1");
       params.delete('sort')
+      params.delete('genre')
     } else {
       params.delete("search");
       params.delete('sort')
+      params.delete('genre')
       params.set("page","1")
     }
-    router.push(`${pathname}?${params.toString()}`);
+    navigate(`${pathname}?${params.toString()}`);
   };
+
+  const handleClear = () => { 
+    setSearchValue('');
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('search')
+    navigate(`${pathname}?${params.toString()}`)
+  }
   return (
     <div className="relative">
-      <IoSearch className="absolute top-1/2 translate-y-[-50%] left-3 text-[15px] text-white/80" />
+      <IoSearch className="absolute top-1/2 left-3 translate-y-[-50%] text-[15px] text-black/50 dark:text-white/50" />
       <input
         placeholder={placeholder}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value.trim())}
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        className="rounded-lg w-75 bg-black/40 pl-8 py-2 focus text-white/80  focus:outline focus:outline-red-400/60"
+        className="w-75 rounded-lg bg-black/5 py-2 pr-8 pl-8 text-black placeholder:text-black/40 focus:outline focus:outline-red-400/60 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40"
       />
+      {searchValue && (
+        <IoMdClose
+          className="absolute top-1/2 right-3 translate-y-[-50%] cursor-pointer text-[15px] text-black/50 dark:text-white/50"
+          onClick={() => handleClear()}
+        />
+      )}
     </div>
   );
 }
