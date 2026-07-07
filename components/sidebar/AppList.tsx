@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaChevronDown } from "react-icons/fa";
 
-function AppList() {
+function AppList({ onNavigate }: { onNavigate?: () => void }) {
 
   const pathName = usePathname();
   const [expanded, setExpanded] = useState({
@@ -47,6 +47,7 @@ function AppList() {
                         <Link
                           key={page.name}
                           href={page.link}
+                          onClick={onNavigate}
                           className={`flex items-center gap-3 rounded-md px-2 py-2 text-sm transition ${page.link === pathName ? "bg-red-500/10 text-red-500 font-medium":"text-foreground/90 hover:bg-foreground/5 hover:text-foreground"}`}
                         >
                           <Icon size={18} className={`shrink-0 ${page.link === pathName ? "text-red-500":"text-foreground/60"} `} />

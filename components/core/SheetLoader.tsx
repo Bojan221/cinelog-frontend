@@ -1,14 +1,14 @@
 export function MovieLoader() {
   return (
-    <div className="flex animate-pulse flex-col gap-4 px-6 py-3">
-      <div className="flex gap-8">
+    <div className="flex h-full animate-pulse flex-col gap-4 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6">
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-8">
         {/* Poster */}
-        <div className="h-75 w-50 shrink-0 rounded-lg bg-black/10 dark:bg-white/10"></div>
+        <div className="mx-auto h-75 w-50 shrink-0 rounded-lg bg-black/10 sm:mx-0 dark:bg-white/10"></div>
 
         <div className="flex flex-col gap-4">
           {/* Title */}
           <div className="flex flex-col gap-2">
-            <div className="h-9 w-64 rounded-md bg-black/10 dark:bg-white/10"></div>
+            <div className="h-8 w-48 rounded-md bg-black/10 sm:h-9 sm:w-64 dark:bg-white/10"></div>
             <div className="h-5 w-32 rounded-md bg-black/10 dark:bg-white/10"></div>
             <div className="flex gap-2">
               <div className="h-5 w-15 rounded-full bg-black/10 dark:bg-white/10"></div>
@@ -27,10 +27,10 @@ export function MovieLoader() {
           </div>
         </div>
       </div>
-      <div className="flex gap-5 py-2">
-        <div className="rounded-md bg-black/10 dark:bg-white/10 h-8 w-30"></div>
-        <div className="rounded-md bg-black/10 dark:bg-white/10 h-8 w-30"></div>
-        <div className="rounded-md bg-black/10 dark:bg-white/10 h-8 w-30"></div>
+      <div className="flex flex-wrap gap-2 py-2 sm:gap-3">
+        <div className="h-8 w-30 rounded-md bg-black/10 dark:bg-white/10"></div>
+        <div className="h-8 w-30 rounded-md bg-black/10 dark:bg-white/10"></div>
+        <div className="h-8 w-30 rounded-md bg-black/10 dark:bg-white/10"></div>
       </div>
 
       {/* Overview */}

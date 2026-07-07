@@ -57,26 +57,26 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
   };
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-y-auto px-6 py-3 thin-scrollbar">
-      <div className="flex gap-8">
-        <div className="shrink-0">
+    <div className="flex h-full flex-col gap-4 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6">
+      <div className="flex flex-col gap-5 sm:flex-row sm:gap-8">
+        <div className="mx-auto shrink-0 sm:mx-0">
           {movie.poster ? (
             <Image
               alt={movie.title ?? String(movie.tmdbId)}
               width={200}
               height={300}
               src={`${POST_URL}${movie.poster}`}
-              className="rounded-lg object-cover border border-white/40"
+              className="rounded-lg object-cover border border-black/10 dark:border-white/20"
             />
           ) : (
-            <div className="flex h-75 w-50 items-center justify-center text-sm text-black/40 dark:text-white/40 border rounded-lg border-white/40">
+            <div className="flex h-75 w-50 items-center justify-center rounded-lg border border-black/10 bg-black/5 text-sm text-black/40 dark:border-white/15 dark:bg-white/5 dark:text-white/40">
               No image
             </div>
           )}
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <h2 className="text-4xl font-semibold text-black dark:text-white">
+            <h2 className="text-2xl font-semibold text-black sm:text-4xl dark:text-white">
               {movie.title}
             </h2>
             <p className="flex items-center gap-2 text-base font-medium text-black/50 dark:text-white/50">
@@ -133,22 +133,22 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           </div>
         </div>
       </div>
-      <div className="flex gap-5 py-2 border-y border-black/10 dark:border-white/15">
+      <div className="flex flex-wrap gap-2 py-2 border-y border-black/10 sm:gap-3 dark:border-white/15">
         <div>
           <button
-            className="flex items-center justify-center bg-red-400/60 rounded-md px-4 py-2 text-white/80 font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-400/80"
+            className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600"
             onClick={() => addToList("Watchlist")}
           >
             Add To Watch List
           </button>
         </div>
         <div>
-          <button className="flex items-center justify-center bg-red-400/60 rounded-md px-4 py-2 text-white/80 font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-400/80">
+          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600">
             Add To Watched List
           </button>
         </div>
         <div>
-          <button className="flex items-center justify-center bg-red-400/60 rounded-md px-4 py-2 text-white/80 font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-400/80">
+          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600">
             Add To Another List
           </button>
         </div>

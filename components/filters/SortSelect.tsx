@@ -40,13 +40,13 @@ function SortSelect() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative flex-1 sm:flex-none">
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 rounded-lg bg-black/5 px-3 py-2 text-black dark:bg-white/5 dark:text-white focus:outline focus:outline-red-400/60"
+        className="flex w-full items-center justify-between gap-2 rounded-lg bg-black/5 px-3 py-2 text-black dark:bg-white/5 dark:text-white focus:outline focus:outline-red-400/60"
       >
-        <span>Sort by{activeOption ? `: ${activeOption.label}` : ""}</span>
+        <span className="truncate">Sort by{activeOption ? `: ${activeOption.label}` : ""}</span>
         {activeOption ? (
           <IoClose
             role="button"
@@ -61,7 +61,7 @@ function SortSelect() {
         )}
       </button>
       {isOpen && (
-        <div className="absolute z-10 mt-1 overflow-hidden rounded-lg border border-black/10 bg-background text-black shadow-lg dark:border-white/10 dark:text-white">
+        <div className="absolute z-10 mt-1 min-w-full overflow-hidden rounded-lg border border-black/10 bg-background text-black shadow-lg dark:border-white/10 dark:text-white">
           {options.map((option) => (
             <div
               key={option.value}

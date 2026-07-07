@@ -8,7 +8,7 @@ interface Props {
 function MovieActors({ actors }: Props) {
   const PICTURE_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL
   return (
-    <div className="grid grid-cols-2 h-full gap-5 overflow-y-auto px-6 py-3 thin-scrollbar">
+    <div className="grid h-full grid-cols-1 gap-5 overflow-y-auto px-4 py-3 thin-scrollbar sm:grid-cols-2 sm:px-6">
       {actors?.length > 0 ? (
         actors.map((actor)=> { 
           return (
@@ -48,7 +48,7 @@ function MovieActors({ actors }: Props) {
           )
         })
       ):(
-        <div className="flex items-center justify-center text-[25px] text-white/60">No Actors</div>
+        <div className="col-span-full flex h-full items-center justify-center text-2xl text-black/40 dark:text-white/40">No Actors</div>
       )}
     </div>
   );

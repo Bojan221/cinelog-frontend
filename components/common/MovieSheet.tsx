@@ -53,7 +53,7 @@ function MovieSheet({ movieId }: { movieId: string | null }) {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="shrink-0 px-6 pt-3">
+      <div className="shrink-0 px-4 pt-3 sm:px-6">
         <div className="flex gap-1 rounded-xl bg-black/5 p-1 dark:bg-white/5">
           {TABS.map((tab) => (
             <button

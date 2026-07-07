@@ -103,14 +103,14 @@ function page() {
   return (
     <div className="relative h-screen w-full overflow-hidden bg-[#0a0a0b] text-white">
 
-      <div className="absolute top-5 left-8 z-20">
+      <div className="absolute top-4 left-4 z-20 sm:top-5 sm:left-8">
         <Logo size="lg" />
       </div>
 
-      <div className="mx-auto flex h-screen max-w-6xl items-center px-6 pt-16 pb-6">
+      <div className="mx-auto flex h-screen max-w-6xl items-center px-4 pt-16 pb-4 sm:px-6 sm:pb-6">
         <div className="grid max-h-full w-full overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-2">
 
-          <div className="relative flex flex-col justify-center p-8">
+          <div className="relative hidden flex-col justify-center p-8 lg:flex">
 
             <div
               className="absolute inset-0 bg-cover bg-center"
@@ -167,7 +167,7 @@ function page() {
           </div>
 
 
-          <div className="min-h-0 overflow-y-auto bg-[#0d0d0f] p-8 sleek-scrollbar">
+          <div className="min-h-0 overflow-y-auto bg-[#0d0d0f] p-6 sm:p-8 sleek-scrollbar">
             <div className="mx-auto w-full max-w-md">
               <div className="text-center">
                 <h2 className="text-2xl font-bold">Create Account</h2>
@@ -182,7 +182,7 @@ function page() {
                 noValidate
               >
                 {/* First / Last name */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div className="flex flex-col gap-2">
                     <label className="text-sm text-neutral-300">First Name</label>
                     <div className="relative">

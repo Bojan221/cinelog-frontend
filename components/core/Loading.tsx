@@ -1,4 +1,4 @@
-const GRID_COLUMNS = "repeat(auto-fill, minmax(180px, 1fr))";
+const GRID_COLUMNS = "repeat(auto-fill, minmax(min(150px, 100%), 1fr))";
 
 function SkeletonCard() {
   return (
@@ -36,13 +36,13 @@ function MovieListLoader({ count = 20, overlay = false, firstLoad = false }: Pro
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-white/20 border-t-red-400" />
         </div>
       )}
-      {firstLoad &&(<div className="flex items-center px-4 py-3 border-b border-black/10 dark:border-white/10 gap-2">
-        <div className="h-10 w-50 animate-pulse rounded-md bg-black/10 dark:bg-white/10"></div>
-        <div className="h-10 w-50 animate-pulse rounded-md bg-black/10 dark:bg-white/10"></div>
-        <div className="h-10 w-50 animate-pulse rounded-md bg-black/10 dark:bg-white/10"></div>
+      {firstLoad &&(<div className="flex flex-wrap items-center gap-2 border-b border-black/10 px-3 py-3 sm:px-4 dark:border-white/10">
+        <div className="h-10 w-full animate-pulse rounded-md bg-black/10 sm:w-64 md:w-75 dark:bg-white/10"></div>
+        <div className="h-10 flex-1 animate-pulse rounded-md bg-black/10 sm:w-30 sm:flex-none dark:bg-white/10"></div>
+        <div className="h-10 flex-1 animate-pulse rounded-md bg-black/10 sm:w-50 sm:flex-none dark:bg-white/10"></div>
       </div>)}
       <div
-        className="grid w-full gap-6 p-5"
+        className="grid w-full  gap-3 p-3 sm:gap-5 sm:p-5"
         style={{ gridTemplateColumns: GRID_COLUMNS }}
       >
         {Array.from({ length: count }).map((_, idx) => (

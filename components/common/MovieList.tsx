@@ -28,8 +28,10 @@ function MovieGrid({ moviesData }: Props) {
   
   return (
     <div
-      className="grid w-full gap-6 p-5"
-      style={{ gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))" }}
+      className="grid w-full gap-3 p-3 sm:gap-5 sm:p-5"
+      style={{
+        gridTemplateColumns: "repeat(auto-fill, minmax(min(150px, 100%), 1fr))",
+      }}
     >
       {moviesData &&
         moviesData.movies.map((movie: any, idx) => {
@@ -57,7 +59,7 @@ function MovieList({
   return (
     <NavigationProvider>
       <div className="w-full">
-        <div className="px-4 py-3 border-b border-black/10 dark:border-white/10 flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 border-b border-black/10 px-3 py-3 sm:px-4 dark:border-white/10">
           <SearchInput placeholder="Search for movies..." />
           <SortSelect />
           <GenreSelect />

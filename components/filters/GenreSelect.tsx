@@ -66,13 +66,13 @@ function GenreSelect() {
     setIsOpen(false);
   };
   return (
-    <div className="relative w-50" ref={containerRef}>
+    <div className="relative flex-1 sm:w-50 sm:flex-none" ref={containerRef}>
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex items-center gap-2 rounded-lg bg-black/5 px-3 py-2 text-black dark:bg-white/5 dark:text-white focus:outline focus:outline-red-400/60"
+        className="flex w-full items-center justify-between gap-2 rounded-lg bg-black/5 px-3 py-2 text-black dark:bg-white/5 dark:text-white focus:outline focus:outline-red-400/60"
       >
-        <span>Genre{activeGenre ? `: ${activeGenre.name}` : ""}</span>
+        <span className="truncate">Genre{activeGenre ? `: ${activeGenre.name}` : ""}</span>
         {activeGenre ? (
           <IoClose
             role="button"

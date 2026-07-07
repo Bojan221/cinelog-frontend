@@ -44,14 +44,14 @@ function SearchInput({ placeholder }: Props) {
     navigate(`${pathname}?${params.toString()}`)
   }
   return (
-    <div className="relative">
+    <div className="relative w-full sm:w-auto">
       <IoSearch className="absolute top-1/2 left-3 translate-y-[-50%] text-[15px] text-black/50 dark:text-white/50" />
       <input
         placeholder={placeholder}
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        className="w-75 rounded-lg bg-black/5 py-2 pr-8 pl-8 text-black placeholder:text-black/40 focus:outline focus:outline-red-400/60 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40"
+        className="w-full rounded-lg bg-black/5 py-2 pr-8 pl-8 text-black placeholder:text-black/40 focus:outline focus:outline-red-400/60 sm:w-64 md:w-75 dark:bg-white/5 dark:text-white dark:placeholder:text-white/40"
       />
       {searchValue && (
         <IoMdClose

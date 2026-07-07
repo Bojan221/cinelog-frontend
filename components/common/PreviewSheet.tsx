@@ -56,7 +56,7 @@ function PreviewSheet() {
 
   return (
     <div
-      className={`bg-background border-l-2 border-black/10 dark:border-white/10 fixed z-50 right-0 top-0 bottom-0 flex w-1/3 flex-col transition-all duration-300 ${
+      className={`bg-background border-l-2 border-black/10 dark:border-white/10 fixed z-50 right-0 top-0 bottom-0 flex w-full flex-col transition-transform duration-300 sm:w-110 lg:w-[42%] xl:w-[36%] 2xl:max-w-160 ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
