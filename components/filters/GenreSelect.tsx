@@ -23,7 +23,7 @@ function GenreSelect() {
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = await axiosPrivate.get("/movies/movieGenres");
+        const response = await axiosPrivate.get("/movies/genres");
         setGenres(response.data.genres);
         
       } catch (error) {

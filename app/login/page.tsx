@@ -17,6 +17,7 @@ import Link from "next/link";
 import { loginSchema } from "./schema";
 import { useAppDispatch } from "@/reduxStore/hooks";
 import { loginUser } from "@/reduxStore/authSlice";
+import { showToast } from "@/components/common/Toast";
 
 type FormValues = {
   email: string;
@@ -69,9 +70,12 @@ function page() {
       await dispatch(
         loginUser({ email: result.data.email, password: result.data.password })
       ).unwrap();
+      showToast("success", "Welcome back!");
       router.push("/");
     } catch (err) {
-      setServerError(typeof err === "string" ? err : "Login failed");
+      const message = typeof err === "string" ? err : "Login failed";
+      setServerError(message);
+      showToast("error", message);
     } finally {
       setSubmitting(false);
     }

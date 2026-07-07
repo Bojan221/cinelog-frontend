@@ -56,17 +56,20 @@ function PreviewSheet() {
 
   return (
     <div
-      className={`bg-background border-l-2 border-black/10 dark:border-white/10 fixed z-50 right-0 top-0 bottom-0 w-1/3 transition-all duration-300 ${
+      className={`bg-background border-l-2 border-black/10 dark:border-white/10 fixed z-50 right-0 top-0 bottom-0 flex w-1/3 flex-col transition-all duration-300 ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="flex items-center justify-end px-4 py-3">
+      <div className="flex shrink-0 items-center justify-between border-b border-black/10 px-5 py-3 dark:border-white/10">
+        <span className="text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
+          {previewType} Preview
+        </span>
         <IoClose
-          className="cursor-pointer text-[28px] text-black/70 transition-colors hover:text-black dark:text-white/70 dark:hover:text-white"
+          className="cursor-pointer text-[28px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white"
           onClick={() => handleClosePreview()}
         />
       </div>
-      <div>
+      <div className="min-h-0 flex-1">
         {renderContent()}
       </div>
     </div>

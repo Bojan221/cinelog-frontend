@@ -39,10 +39,12 @@ async function AllMovies({
   });
 
   let moviesData = { page: 0, movies: [], totalPages: 0 };
+  let loadError = false;
   try {
-    moviesData = await serverFetch(`/movies/allMovies?${queryParams.toString()}`);
+    moviesData = await serverFetch(`/movies?${queryParams.toString()}`);
   } catch (err) {
     console.error(err);
+    loadError = true;
   }
-  return <MovieList moviesData={moviesData} />;
+  return <MovieList moviesData={moviesData} loadError={loadError} />;
 }

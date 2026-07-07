@@ -8,12 +8,14 @@ import type { NextRequest } from "next/server";
 // A *stale* cookie (present but rejected by the backend) still passes this
 // check — that case is caught server-side by requireServerAuth(), which
 // validates the token against the backend during render.
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const hasSession = req.cookies.has("refreshToken");
+
   if (!hasSession) {
     const loginUrl = new URL("/login", req.url);
     return NextResponse.redirect(loginUrl);
   }
+
   return NextResponse.next();
 }
 

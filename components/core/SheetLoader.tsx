@@ -27,6 +27,40 @@ export function MovieLoader() {
           </div>
         </div>
       </div>
+      <div className="flex gap-5 py-2">
+        <div className="rounded-md bg-black/10 dark:bg-white/10 h-8 w-30"></div>
+        <div className="rounded-md bg-black/10 dark:bg-white/10 h-8 w-30"></div>
+        <div className="rounded-md bg-black/10 dark:bg-white/10 h-8 w-30"></div>
+      </div>
+
+      {/* Overview */}
+      <div className="flex flex-col gap-3">
+        <div className="h-6 w-28 rounded-md bg-black/10 dark:bg-white/10"></div>
+        <div className="flex flex-col gap-2 rounded-lg border border-black/10 px-4 py-3 dark:border-white/10">
+          <div className="h-3.5 w-full rounded bg-black/10 dark:bg-white/10"></div>
+          <div className="h-3.5 w-full rounded bg-black/10 dark:bg-white/10"></div>
+          <div className="h-3.5 w-4/5 rounded bg-black/10 dark:bg-white/10"></div>
+        </div>
+      </div>
+
+      {/* Trailer */}
+      <div className="flex flex-col gap-3">
+        <div className="h-6 w-28 rounded-md bg-black/10 dark:bg-white/10"></div>
+        <div className="aspect-video w-full rounded-lg bg-black/10 dark:bg-white/10"></div>
+      </div>
+
+      {/* Movie Info */}
+      <div className="flex flex-col gap-3">
+        <div className="h-6 w-28 rounded-md bg-black/10 dark:bg-white/10"></div>
+        <div className="flex flex-col divide-y divide-black/10 rounded-lg border border-black/10 dark:divide-white/10 dark:border-white/10">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 px-4 py-2.5">
+              <div className="h-6 w-1/3 shrink-0 rounded bg-black/10 dark:bg-white/10"></div>
+              <div className="h-6 w-2/5 rounded bg-black/10 dark:bg-white/10"></div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

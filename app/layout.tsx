@@ -4,6 +4,7 @@ import "./globals.css";
 import ReduxProvider from "../reduxStore/Provider";
 import MaterialProvider from "@/materialUI/Provider";
 import InlineScript from "./InlineScript";
+import ToastProvider from "@/components/common/Toast";
 
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.setAttribute("data-theme",t);}catch(e){}})();`;
 
@@ -41,6 +42,7 @@ export default function RootLayout({
         <ReduxProvider>
           <MaterialProvider>
             {children}
+            <ToastProvider />
           </MaterialProvider>
         </ReduxProvider>
       </body>

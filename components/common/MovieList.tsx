@@ -8,6 +8,8 @@ import GenreSelect from "../filters/GenreSelect";
 import MovieListLoader from "../core/Loading";
 import { NavigationProvider, useNavigation } from "./NavigationContext";
 import { Movie } from "@/types/movie";
+import { useEffect } from "react";
+import { showToast } from "./Toast";
 
 interface Props {
   moviesData: {
@@ -42,7 +44,16 @@ function MovieGrid({ moviesData }: Props) {
     </div>
   );
 }
-function MovieList({ moviesData }: Props) {
+function MovieList({
+  moviesData,
+  loadError,
+}: Props & { loadError?: boolean }) {
+  useEffect(() => {
+    if (loadError) {
+      showToast("error", "Unable to load movies. Please try again.");
+    }
+  }, [loadError]);
+
   return (
     <NavigationProvider>
       <div className="w-full">

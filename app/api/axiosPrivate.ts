@@ -14,20 +14,14 @@ const axiosPrivate = axios.create({
   withCredentials: true,
 });
 
-axiosPrivate.interceptors.request.use((config) => {
-  const token = getAccessToken();
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-
 type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean };
 
 let refreshPromise: Promise<string> | null = null;
 
-const refreshAccessToken = async (): Promise<string> => {
+// Shared, de-duplicated refresh: concurrent callers await the same request so
+// we never fire two /auth/refresh round trips (which could rotate the cookie
+// out from under each other).
+export const refreshAccessToken = async (): Promise<string> => {
   if (!refreshPromise) {
     refreshPromise = axiosAuth
       .post<{ accessToken: string }>(REFRESH_URL)
@@ -42,6 +36,24 @@ const refreshAccessToken = async (): Promise<string> => {
   }
   return refreshPromise;
 };
+
+// Attach the token. If it's not in memory yet (e.g. right after a hard refresh,
+// before initAuth has resolved), wait for a refresh instead of firing a request
+// that would just 401 and retry.
+axiosPrivate.interceptors.request.use(async (config) => {
+  let token = getAccessToken();
+  if (!token) {
+    try {
+      token = await refreshAccessToken();
+    } catch {
+      // No valid session — let the request go out and 401 normally.
+    }
+  }
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 axiosPrivate.interceptors.response.use(
   (response) => response,

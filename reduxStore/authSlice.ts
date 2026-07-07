@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import axiosAuth from "@/app/api/axiosAuth";
+import { refreshAccessToken } from "@/app/api/axiosPrivate";
 import { decodeToken, AuthUser } from "@/app/api/decodeToken";
 import { setAccessToken, clearAccessToken } from "@/app/api/tokenStore";
 
@@ -57,9 +58,7 @@ export const initAuth = createAsyncThunk<AuthUser | null>(
   "auth/init",
   async () => {
     try {
-      const { data } = await axiosAuth.post("/auth/refresh");
-      const token = data.accessToken as string;
-      setAccessToken(token);
+      const token = await refreshAccessToken();
       return decodeToken(token);
     } catch {
       return null;

@@ -20,7 +20,7 @@ export interface Movie {
     spokenLanguages:Languages[],
     actors: Actor[],
     director:Director,
-    writters:Writter[],
+    writers:Writter[],
     trailer:Trailer,
     images:Images,
     similarMovies: Similar[],

@@ -16,6 +16,7 @@ import Link from "next/link";
 import { registerSchema } from "./schema";
 import { useAppDispatch } from "@/reduxStore/hooks";
 import { registerUser } from "@/reduxStore/authSlice";
+import { showToast } from "@/components/common/Toast";
 
 type FormValues = {
   firstName: string;
@@ -86,12 +87,14 @@ function page() {
           password: result.data.password,
         })
       ).unwrap();
+      showToast("success", "Account created successfully! Please log in.");
       // Registration doesn't log the user in — send them to login.
       router.push("/login");
     } catch (err) {
-      setServerError(
-        typeof err === "string" ? err : "Failed to create account"
-      );
+      const message =
+        typeof err === "string" ? err : "Failed to create account";
+      setServerError(message);
+      showToast("error", message);
     } finally {
       setSubmitting(false);
     }
