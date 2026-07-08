@@ -4,6 +4,7 @@ export interface Movie {
     tmdbId:number,
     title: string,
     overview: string,
+    tagline:string,
     poster: string,
     releaseDate: string,
     vote: number,

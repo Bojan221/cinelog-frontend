@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { closePreview, openPreview } from "@/reduxStore/previewSheetSlice";
 import MovieSheet from "./MovieSheet";
+import SerieSheet from "./series/SerieSheet";
 import { MovieLoader } from "../core/SheetLoader";
 
 function PreviewSheet() {
@@ -49,6 +50,8 @@ function PreviewSheet() {
     switch(previewType) {
         case 'movie':
             return <MovieSheet movieId={previewId || null}/>;
+        case "tv":
+            return <SerieSheet serieId={previewId || null}/>
         default :
         return <MovieLoader/>
     } 

@@ -4,36 +4,38 @@ import Image from "next/image";
 import { FaStar, FaRegHeart } from "react-icons/fa";
 import { normalizeDate, formatRate } from "@/utils/formatters";
 import { Movie } from "@/types/movie";
+import { Serie } from "@/types/serie";
 import { useAppDispatch } from "@/reduxStore/hooks";
 import { openPreview } from "@/reduxStore/previewSheetSlice";
 interface CardProps {
-  movie: Movie;
+  media: Movie | Serie;
+  type: 'movie' | 'tv';
   loading: "eager" | "lazy";
 }
 
-function MovieCard({ movie, loading }: CardProps) {
+function MovieCard({ media, loading, type }: CardProps) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
   const dispatch = useAppDispatch();
   return (
     <div className="group flex flex-col gap-3 border rounded-xl border-black/10 dark:border-white/10">
       <div className="relative aspect-2/3 w-full overflow-hidden rounded-xl bg-black/5 ring-1 ring-black/10 transition duration-300 group-hover:ring-black/25 group-hover:shadow-lg group-hover:shadow-black/20 dark:bg-white/5 dark:ring-white/10 dark:group-hover:ring-white/25 dark:group-hover:shadow-black/40">
-        {movie.poster ? (
+        {media.poster ? (
           <Image
-            alt={movie.title ?? String(movie.tmdbId)}
+            alt={media.title ?? String(media.tmdbId)}
             fill
             sizes="(max-width: 768px) 45vw, 224px"
-            src={`${POST_URL}${movie.poster ? movie.poster : movie.backdrop}`}
+            src={`${POST_URL}${media.poster ? media.poster : media.backdrop}`}
             className="object-cover transition duration-300 group-hover:scale-[1.03] cursor-pointer"
             loading={loading}
             onClick={() =>
-              dispatch(openPreview({ content: `movie-${movie.tmdbId}` }))
+              dispatch(openPreview({ content: `${type}-${media.tmdbId}` }))
             }
           />
         ) : (
           <div
             className="flex h-full w-full items-center justify-center text-sm text-black/40 dark:text-white/40 cursor-pointer"
             onClick={() =>
-              dispatch(openPreview({ content: `movie-${movie.tmdbId}` }))
+              dispatch(openPreview({ content: `movie-${media.tmdbId}` }))
             }
           >
             No image
@@ -53,22 +55,22 @@ function MovieCard({ movie, loading }: CardProps) {
 
       <div className="flex flex-col gap-1.5 px-2 pb-2">
         <h3 className="truncate text-[15px] font-semibold text-black dark:text-white">
-          {movie.title ?? "Untitled"}
+          {media.title ?? "Untitled"}
         </h3>
 
-        {movie.vote !== null && (
+        {media.vote !== null && (
           <div className="flex items-center gap-1.5 text-sm">
             <FaStar className="text-amber-500 dark:text-amber-400" size={14} />
             <span className="font-medium text-black/80 dark:text-white/90">
-              {formatRate(movie.vote)}
+              {formatRate(media.vote)}
             </span>
             <span className="text-black/40 dark:text-white/40">/10</span>
           </div>
         )}
 
-        {movie.releaseDate && (
+        {media.releaseDate && (
           <p className="text-xs text-black/50 dark:text-white/50">
-            {normalizeDate(movie.releaseDate)}
+            {normalizeDate(media.releaseDate)}
           </p>
         )}
       </div>

@@ -9,6 +9,8 @@ export function MovieLoader() {
           {/* Title */}
           <div className="flex flex-col gap-2">
             <div className="h-8 w-48 rounded-md bg-black/10 sm:h-9 sm:w-64 dark:bg-white/10"></div>
+            {/* Tagline */}
+            <div className="h-4 w-40 rounded-md bg-black/10 dark:bg-white/10"></div>
             <div className="h-5 w-32 rounded-md bg-black/10 dark:bg-white/10"></div>
             <div className="flex gap-2">
               <div className="h-5 w-15 rounded-full bg-black/10 dark:bg-white/10"></div>

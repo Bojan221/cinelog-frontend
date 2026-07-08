@@ -1,53 +1,58 @@
 import Image from "next/image";
-import { Movie } from "@/types/movie";
+import { SerieDetail } from "@/types/serie";
 import { Genre } from "@/types/genre";
 import { getYearFromDate } from "@/utils/helpers";
 import { FaStar } from "react-icons/fa";
 import { formatRate, normalizeDate } from "@/utils/formatters";
-import DragScroll from "./DragScroll";
+import DragScroll from "../DragScroll";
 import axiosPrivate from "@/app/api/axiosPrivate";
-import { showToast } from "./Toast";
+import { showToast } from "../Toast";
 
 interface Props {
-  movie: Movie;
+  serie: SerieDetail;
   genres: Genre[];
   trailerLoaded: boolean;
   setTrailerLoaded: (value: boolean) => void;
 }
 
-function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
+function SerieInfo({ serie, genres, trailerLoaded, setTrailerLoaded }: Props) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
 
-  const movieGenres =
-    movie.genres
+  const serieGenres =
+    serie.genres
       ?.map((g) => genres?.find((genre) => genre.id === g.id) ?? g)
       .filter((g): g is Genre => Boolean(g?.name)) ?? [];
 
-  const movieActors =
-    movie.actors?.length > 0
-      ? movie.actors.map((actor) => actor.name).join(", ")
+  const serieActors =
+    serie.actors?.length > 0
+      ? serie.actors.map((actor) => actor.name).join(", ")
       : "-";
 
-  const movieWritters =
-    movie.writers?.length > 0
-      ? movie.writers.map((writter) => writter.name).join(", ")
+  const serieCreators =
+    serie.creators?.length > 0
+      ? serie.creators.map((creator) => creator.name).join(", ")
+      : "-";
+
+  const serieNetworks =
+    serie.networks?.length > 0
+      ? serie.networks.map((network) => network.name).join(", ")
       : "-";
 
   const addToList = async (list: string) => {
     try {
       const body = {
-        movieId: movie.tmdbId,
+        serieId: serie.tmdbId,
         listName: list,
-        title: movie.title,
-        overview: movie.overview,
-        poster: movie.poster,
-        releaseDate: movie.releaseDate,
-        vote: movie.vote,
+        title: serie.title,
+        overview: serie.overview,
+        poster: serie.poster,
+        releaseDate: serie.firstAirDate,
+        vote: serie.vote,
       };
-      await axiosPrivate.post(`/movies/lists`, body);
-      showToast("success", "Movie successfully added");
+      await axiosPrivate.post(`/series/lists`, body);
+      showToast("success", "Serie successfully added");
     } catch (err: any) {
-      console.log(err.response.data.message)
+      console.log(err.response.data.message);
       if (err.status === 409) {
         return showToast("info", err.response.data.message);
       } else {
@@ -60,12 +65,12 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
     <div className="flex h-full flex-col gap-4 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:gap-8">
         <div className="mx-auto shrink-0 sm:mx-0">
-          {movie.poster ? (
+          {serie.poster ? (
             <Image
-              alt={movie.title ?? String(movie.tmdbId)}
+              alt={serie.title ?? String(serie.tmdbId)}
               width={200}
               height={300}
-              src={`${POST_URL}${movie.poster}`}
+              src={`${POST_URL}${serie.poster}`}
               className="rounded-lg object-cover border border-black/10 dark:border-white/20"
             />
           ) : (
@@ -77,32 +82,35 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-semibold text-black sm:text-4xl dark:text-white">
-              {movie.title}
+              {serie.title}
             </h2>
-            {movie.tagline ? (
+            {serie.tagline ? (
               <p className="text-sm italic text-black/50 dark:text-white/50">
-                {movie.tagline}
+                {serie.tagline}
               </p>
             ) : null}
             <p className="flex items-center gap-2 text-base font-medium text-black/50 dark:text-white/50">
-              {movie.releaseDate ? (
-                <span>{getYearFromDate(movie.releaseDate)}</span>
+              {serie.firstAirDate ? (
+                <span>{getYearFromDate(serie.firstAirDate)}</span>
               ) : (
                 <span>-</span>
               )}
-              {movie.runtime ? (
+              {serie.numberOfSeasons ? (
                 <>
                   <span aria-hidden>·</span>
-                  <span>{movie.runtime} min</span>
+                  <span>
+                    {serie.numberOfSeasons}{" "}
+                    {serie.numberOfSeasons === 1 ? "Season" : "Seasons"}
+                  </span>
                 </>
               ) : (
                 <span>-</span>
               )}
             </p>
 
-            {movieGenres.length > 0 ? (
+            {serieGenres.length > 0 ? (
               <div className="flex flex-wrap gap-2">
-                {movieGenres.map((genre) => (
+                {serieGenres.map((genre) => (
                   <span
                     key={genre.id}
                     className="inline-flex items-center rounded-full bg-black/5 px-3 py-1 text-sm font-medium text-black/70 dark:bg-white/10 dark:text-white/70"
@@ -117,7 +125,7 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           <div className="flex items-center gap-1.5 text-lg">
             <FaStar className="text-amber-500 dark:text-amber-400" size={20} />
             <span className="font-semibold text-black/80 dark:text-white/90">
-              {formatRate(movie.vote)}
+              {formatRate(serie.vote)}
             </span>
             <span className="text-black/40 dark:text-white/40">/10</span>
           </div>
@@ -128,12 +136,12 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
             </p>
             <span
               className={`inline-flex w-fit items-center rounded-full px-3 py-1 text-sm font-medium ${
-                movie.status === "Released"
+                serie.inProduction
                   ? "bg-green-500/15 text-green-600 dark:text-green-400"
                   : "bg-black/10 text-black/60 dark:bg-white/10 dark:text-white/60"
               }`}
             >
-              {movie.status}
+              {serie.status}
             </span>
           </div>
         </div>
@@ -158,18 +166,18 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           </button>
         </div>
       </div>
-      {movie.overview ? (
+      {serie.overview ? (
         <div className="flex flex-col gap-3">
           <h3 className="text-lg font-semibold text-black dark:text-white">
             Overview
           </h3>
           <p className="rounded-lg border border-black/10 bg-black/2 px-4 py-3 text-sm leading-relaxed text-black/70 dark:border-white/15 dark:bg-white/3 dark:text-white/80">
-            {movie.overview}
+            {serie.overview}
           </p>
         </div>
       ) : null}
 
-      {movie.trailer?.key ? (
+      {serie.trailer?.key ? (
         <div className="flex flex-col gap-3">
           <h3 className="text-lg font-semibold text-black dark:text-white">
             Trailer
@@ -182,8 +190,8 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
             ) : null}
             <iframe
               className="h-full w-full"
-              src={`https://www.youtube.com/embed/${movie.trailer.key}`}
-              title={movie.trailer.name}
+              src={`https://www.youtube.com/embed/${serie.trailer.key}`}
+              title={serie.trailer.name}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               onLoad={() => setTrailerLoaded(true)}
@@ -194,23 +202,23 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
 
       <div className="flex flex-col gap-3">
         <h3 className="text-lg font-semibold text-black dark:text-white">
-          Movie Info
+          Serie Info
         </h3>
         <div className="flex flex-col divide-y divide-black/10 rounded-lg border border-black/10 text-sm dark:divide-white/10 dark:border-white/15">
           <div className="flex items-center px-4 py-2.5">
             <span className="w-[25%] shrink-0 font-medium text-black/50 dark:text-white/50">
-              Director
+              Creators
             </span>
             <span className="text-black/80 dark:text-white/90">
-              {movie.director?.name ?? "-"}
+              {serieCreators}
             </span>
           </div>
           <div className="flex items-center px-4 py-2.5">
             <span className="w-[25%] shrink-0 font-medium text-black/50 dark:text-white/50">
-              Writers
+              Networks
             </span>
             <span className="text-black/80 dark:text-white/90">
-              {movieWritters}
+              {serieNetworks}
             </span>
           </div>
           <div className="flex items-center px-4 py-2.5">
@@ -218,30 +226,30 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
               Cast
             </span>
             <DragScroll className="min-w-0 flex-1 whitespace-nowrap text-black/80 dark:text-white/90">
-              {movieActors}
+              {serieActors}
             </DragScroll>
           </div>
           <div className="flex items-center px-4 py-2.5">
             <span className="w-[25%] shrink-0 font-medium text-black/50 dark:text-white/50">
-              Release Date
+              First Air Date
             </span>
             <span className="text-black/80 dark:text-white/90">
-              {movie.releaseDate ? normalizeDate(movie.releaseDate) : "-"}
+              {serie.firstAirDate ? normalizeDate(serie.firstAirDate) : "-"}
             </span>
           </div>
           <div className="flex items-center px-4 py-2.5">
             <span className="w-[25%] shrink-0 font-medium text-black/50 dark:text-white/50">
               TMDB Rating
             </span>
-            {movie.vote && movie.voteCount ? (
+            {serie.vote && serie.voteCount ? (
               <span className="flex items-center gap-2 text-black/80 dark:text-white/90">
                 <FaStar
                   className="text-amber-500 dark:text-amber-400"
                   size={16}
                 />
-                <span className="font-semibold">{formatRate(movie.vote)}</span>
+                <span className="font-semibold">{formatRate(serie.vote)}</span>
                 <span className="text-black/40 dark:text-white/40">
-                  ({movie.voteCount} votes)
+                  ({serie.voteCount} votes)
                 </span>
               </span>
             ) : (
@@ -252,9 +260,9 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
             <span className="w-[25%] shrink-0 pt-0.5 font-medium text-black/50 dark:text-white/50">
               Genres
             </span>
-            {movieGenres.length > 0 ? (
+            {serieGenres.length > 0 ? (
               <div className="flex flex-1 flex-wrap gap-1.5">
-                {movieGenres.map((genre) => (
+                {serieGenres.map((genre) => (
                   <span
                     key={genre.id}
                     className="inline-flex items-center rounded-full bg-black/5 px-2.5 py-0.5 text-xs font-medium text-black/70 dark:bg-white/10 dark:text-white/70"
@@ -271,9 +279,9 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
             <span className="w-[25%] shrink-0 pt-0.5 font-medium text-black/50 dark:text-white/50">
               Keywords
             </span>
-            {movie.keywords?.length > 0 ? (
+            {serie.keywords?.length > 0 ? (
               <div className="flex flex-1 flex-wrap gap-1.5">
-                {movie.keywords.map((keyword) => (
+                {serie.keywords.map((keyword) => (
                   <span
                     key={keyword.id}
                     className="inline-flex items-center rounded-full bg-black/5 px-2.5 py-0.5 text-xs font-medium text-black/70 dark:bg-white/10 dark:text-white/70"
@@ -292,4 +300,4 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
   );
 }
 
-export default MovieInfo;
+export default SerieInfo;

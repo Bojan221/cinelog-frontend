@@ -1,5 +1,3 @@
-const GRID_COLUMNS = "repeat(auto-fill, minmax(min(150px, 100%), 1fr))";
-
 function SkeletonCard() {
   return (
     <div className="overflow-hidden rounded-2xl border border-black/10 bg-black/5 shadow-lg dark:border-white/10 dark:bg-white/5">
@@ -41,10 +39,7 @@ function MovieListLoader({ count = 20, overlay = false, firstLoad = false }: Pro
         <div className="h-10 flex-1 animate-pulse rounded-md bg-black/10 sm:w-30 sm:flex-none dark:bg-white/10"></div>
         <div className="h-10 flex-1 animate-pulse rounded-md bg-black/10 sm:w-50 sm:flex-none dark:bg-white/10"></div>
       </div>)}
-      <div
-        className="grid w-full  gap-3 p-3 sm:gap-5 sm:p-5"
-        style={{ gridTemplateColumns: GRID_COLUMNS }}
-      >
+      <div className="grid w-full gap-3 p-3 grid-cols-[repeat(auto-fill,minmax(min(150px,100%),1fr))] sm:gap-5 sm:p-5 md:grid-cols-[repeat(auto-fill,minmax(180px,1fr))]">
         {Array.from({ length: count }).map((_, idx) => (
           <SkeletonCard key={idx} />
         ))}
