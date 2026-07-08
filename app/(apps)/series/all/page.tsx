@@ -3,6 +3,9 @@ import MovieListLoader from "@/components/core/Loading";
 import { serverFetch,requireServerAuth } from "@/app/api/serverFetch";
 import SerieList from "@/components/common/series/SerieList";
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 export default function page({
   searchParams,
 }: {
