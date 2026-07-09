@@ -156,7 +156,14 @@ function SerieInfo({ serie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           </button>
         </div>
         <div>
-          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600">
+          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600"
+          onClick={() => addToList("Watching")}>
+            Add To Watching List
+          </button>
+        </div>
+        <div>
+          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600"
+          onClick={() => addToList("Watched")}>
             Add To Watched List
           </button>
         </div>

@@ -163,11 +163,20 @@ function WatchlistView({ movies, listName, variant = "watchlist" }: Props) {
             key={movie.tmdbId}
             loading={idx < 4 ? "eager" : "lazy"}
             type="movie"
-            variant={variant}
+            watchedAt={variant === "watched" ? movie.added_at : undefined}
             actionBusy={busyIds.has(movie.tmdbId)}
             isExiting={exitingIds.has(movie.tmdbId)}
-            onRemove={() => handleRemove(movie)}
-            onMoveToWatched={() => handleMoveToWatched(movie)}
+            moveLabel={variant === "watchlist" ? "Watched" : undefined}
+            onMove={
+              variant === "watchlist"
+                ? () => handleMoveToWatched(movie)
+                : undefined
+            }
+            onRemove={
+              variant === "favorites"
+                ? undefined
+                : () => handleRemove(movie)
+            }
             onUnfavorite={
               variant === "favorites"
                 ? () => animateOut(movie.tmdbId)

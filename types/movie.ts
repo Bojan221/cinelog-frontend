@@ -16,6 +16,7 @@ export interface Movie {
     popularity: number,
     homepage:string,
     favorites:boolean,
+    added_at?:string,
     imdbId:string,
     genres: Genre[],
     productionCompanies:Companies[],

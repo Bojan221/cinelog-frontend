@@ -8,6 +8,7 @@ import MovieInfo from "./MovieInfo";
 import MovieActors from "./MovieActors";
 import { FaInfoCircle, FaUsers } from "react-icons/fa";
 import { showToast } from "./Toast";
+import { useSearchParams } from "next/navigation";
 
 type TabId = "info" | "actors";
 
@@ -22,7 +23,8 @@ function MovieSheet({ movieId }: { movieId: string | null }) {
   const [loading, setLoading] = useState(false);
   const [trailerLoaded, setTrailerLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("info");
-
+  const params = useSearchParams();
+  const previewParam = params.get("preview")
   useEffect(() => {
     const fetchMovie = async () => {
       try {
@@ -48,6 +50,10 @@ function MovieSheet({ movieId }: { movieId: string | null }) {
       fetchMovie();
       fetchGenres();
   }, [movieId]);
+
+  useEffect(()=> {
+    setActiveTab("info")
+  },[previewParam])
 
   if (!movie || loading) return <MovieLoader />;
 

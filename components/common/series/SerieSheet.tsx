@@ -9,6 +9,7 @@ import SerieActors from "./SerieActors";
 import SerieEpisodes from "./SerieEpisodes";
 import { FaInfoCircle, FaUsers, FaListUl } from "react-icons/fa";
 import { showToast } from "../Toast";
+import { useSearchParams } from "next/navigation";
 
 type TabId = "info" | "actors" | "episodes";
 
@@ -24,6 +25,8 @@ function SerieSheet({ serieId }: { serieId: string | null }) {
   const [loading, setLoading] = useState(false);
   const [trailerLoaded, setTrailerLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<TabId>("info");
+  const params = useSearchParams()
+  const previewParam = params.get("preview")
 
   useEffect(() => {
     const fetchSerie = async () => {
@@ -48,6 +51,10 @@ function SerieSheet({ serieId }: { serieId: string | null }) {
     fetchSerie();
     fetchGenres();
   }, [serieId]);
+
+  useEffect(()=> {
+    setActiveTab("info")
+  },[previewParam])
 
   if (!serie || loading) return <MovieLoader />;
 
