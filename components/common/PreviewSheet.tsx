@@ -76,8 +76,12 @@ function PreviewSheet() {
 
   return (
     <div
-      className={`bg-background border-l-2 border-black/10 dark:border-white/10 fixed z-50 right-0 top-0 bottom-0 flex w-full flex-col transition-transform duration-300 sm:w-110 lg:w-[42%] xl:w-[36%] 2xl:max-w-160 ${
-        isOpen ? "translate-x-0" : "translate-x-full"
+      className={`bg-background border-black/10 dark:border-white/10 fixed z-50 flex flex-col transition-transform duration-300
+        inset-x-0 bottom-0 h-[85vh] w-full rounded-t-2xl border-t-2
+        md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:h-auto md:w-110 md:rounded-t-none md:border-t-0 md:border-l-2 lg:w-[42%] xl:w-[36%] 2xl:max-w-160 ${
+        isOpen
+          ? "translate-y-0 md:translate-x-0"
+          : "translate-y-full md:translate-y-0 md:translate-x-full"
       }`}
     >
       <div className="flex shrink-0 items-center justify-between border-b border-black/10 px-5 py-3 dark:border-white/10">
