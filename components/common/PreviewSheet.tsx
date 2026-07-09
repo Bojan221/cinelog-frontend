@@ -2,7 +2,7 @@
 import { useAppSelector, useAppDispatch } from "@/reduxStore/hooks";
 import { IoClose } from "react-icons/io5";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { closePreview, openPreview } from "@/reduxStore/previewSheetSlice";
 import MovieSheet from "./MovieSheet";
 import SerieSheet from "./series/SerieSheet";
@@ -20,8 +20,12 @@ function PreviewSheet() {
   const [previewType, previewId] = currentPreview
     ? currentPreview.split("-")
     : [null, null];
-    
+
+  const prevPathname = useRef(pathname);
+  const navigated = prevPathname.current !== pathname;
+
   useEffect(() => {
+    if (navigated) return;
     if (isOpen && currentPreview !== previewContent && previewContent) {
       const urlParams = new URLSearchParams(searchParams.toString());
 
@@ -29,15 +33,28 @@ function PreviewSheet() {
 
       router.push(`${pathname}?${urlParams.toString()}`, { scroll: false });
     }
-  }, [isOpen, currentPreview, previewContent, pathname, router, searchParams]);
+  }, [
+    navigated,
+    isOpen,
+    currentPreview,
+    previewContent,
+    pathname,
+    router,
+    searchParams,
+  ]);
 
   useEffect(() => {
+    if (navigated) {
+      prevPathname.current = pathname;
+      dispatch(closePreview());
+      return;
+    }
     if (currentPreview) {
       dispatch(openPreview({ content: currentPreview }));
     } else {
       dispatch(closePreview());
     }
-  }, [currentPreview, pathname]);
+  }, [navigated, currentPreview, pathname, dispatch]);
 
   const handleClosePreview = () => {
     dispatch(closePreview());

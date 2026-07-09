@@ -43,6 +43,7 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
         poster: movie.poster,
         releaseDate: movie.releaseDate,
         vote: movie.vote,
+        runtime: movie.runtime
       };
       await axiosPrivate.post(`/movies/lists`, body);
       showToast("success", "Movie successfully added");
@@ -55,7 +56,6 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
       }
     }
   };
-
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:gap-8">
@@ -148,7 +148,7 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           </button>
         </div>
         <div>
-          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600">
+          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600" onClick={()=> addToList('watched')}>
             Add To Watched List
           </button>
         </div>

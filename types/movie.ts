@@ -15,6 +15,7 @@ export interface Movie {
     voteCount:number,
     popularity: number,
     homepage:string,
+    favorites:boolean,
     imdbId:string,
     genres: Genre[],
     productionCompanies:Companies[],

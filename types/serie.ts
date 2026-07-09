@@ -90,7 +90,19 @@ export interface Episode {
     episodeNumber: number,
     seasonNumber: number,
     runtime: number,
-    vote: number
+    vote: number,
+    voteCount?: number
+}
+
+export interface SeasonWithEpisodes {
+    id: number,
+    name: string,
+    overview: string,
+    poster: string | null,
+    airDate: string,
+    seasonNumber: number,
+    vote: number,
+    episodes: Episode[]
 }
 
 export interface SerieActor {

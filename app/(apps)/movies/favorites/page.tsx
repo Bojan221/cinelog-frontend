@@ -10,18 +10,18 @@ export const dynamic = "force-dynamic";
 export default function page() {
   return (
     <Suspense fallback={<MovieListLoader firstLoad />}>
-      <WatchedMovieList />
+      <FavoritesListMovie />
     </Suspense>
   );
 }
 
-async function WatchedMovieList() {
+async function FavoritesListMovie() {
   await requireServerAuth();
 
   let movies: Movie[] = [];
   try {
     const moviesData = await serverFetch<{ list: string; movies: Movie[] }>(
-      "/movies/lists/Watched"
+      "/movies/lists/Favorites"
     );
     movies = moviesData?.movies ?? [];
   } catch (err) {
@@ -29,6 +29,6 @@ async function WatchedMovieList() {
   }
 
   return (
-    <WatchlistView movies={movies} listName="Watched" variant="watched" />
+    <WatchlistView movies={movies} listName="Favorites" variant="favorites" />
   );
 }
