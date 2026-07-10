@@ -1,15 +1,14 @@
 import { Suspense } from "react";
 import { serverFetch, requireServerAuth } from "@/app/api/serverFetch";
-import MovieListLoader from "@/components/core/Loading";
+import MyListsLoader from "@/components/common/movies/MyListsLoader";
 import MyLists from "@/components/common/movies/MyLists";
-import { Movie } from "@/types/movie";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default function page() {
   return (
-    <Suspense fallback={<MovieListLoader firstLoad />}>
+    <Suspense fallback={<MyListsLoader />}>
       <MyMovieLists />
     </Suspense>
   );

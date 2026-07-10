@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import { Movie } from "@/types/movie";
 import { Genre } from "@/types/genre";
 import { getYearFromDate } from "@/utils/helpers";
@@ -7,6 +10,7 @@ import { formatRate, normalizeDate } from "@/utils/formatters";
 import DragScroll from "./DragScroll";
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { showToast } from "./Toast";
+import AddToListPopup from "./AddToListPopup";
 
 interface Props {
   movie: Movie;
@@ -17,6 +21,7 @@ interface Props {
 
 function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
+  const [showAddToList, setShowAddToList] = useState(false);
 
   const movieGenres =
     movie.genres
@@ -47,10 +52,10 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
       };
       await axiosPrivate.post(`/movies/lists`, body);
       showToast("success", "Movie successfully added");
-    } catch (err: any) {
-      console.log(err.response.data.message)
-      if (err.status === 409) {
-        return showToast("info", err.response.data.message);
+    } catch (err) {
+      const res = (err as { response?: { status?: number; data?: { message?: string } } })?.response;
+      if (res?.status === 409) {
+        return showToast("info", res.data?.message ?? "Already in this list");
       } else {
         return showToast("error", "Error adding to list");
       }
@@ -153,11 +158,20 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           </button>
         </div>
         <div>
-          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600">
+          <button
+            className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600"
+            onClick={() => setShowAddToList(true)}
+          >
             Add To Another List
           </button>
         </div>
       </div>
+
+      <AddToListPopup
+        isOpen={showAddToList}
+        onClose={() => setShowAddToList(false)}
+        movie={movie}
+      />
       {movie.overview ? (
         <div className="flex flex-col gap-3">
           <h3 className="text-lg font-semibold text-black dark:text-white">
