@@ -18,7 +18,8 @@ export default function PaginationRounded({
   const { navigate } = useNavigation();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const isMobile = useMediaQuery("(max-width:640px)", { noSsr: true });
+  
+  const isMobile = useMediaQuery("(max-width:640px)");
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,

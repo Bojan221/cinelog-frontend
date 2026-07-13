@@ -7,8 +7,7 @@ import { FaCheck, FaTrashCan } from "react-icons/fa6";
 import { normalizeDate, formatRate } from "@/utils/formatters";
 import { Movie } from "@/types/movie";
 import { Serie } from "@/types/serie";
-import { useAppDispatch } from "@/reduxStore/hooks";
-import { openPreview } from "@/reduxStore/previewSheetSlice";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { showToast } from "./Toast";
 
@@ -44,7 +43,15 @@ function MovieCard({
   onUnfavorite,
 }: CardProps) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
-  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const openPreview = (content: string) => {
+    const urlParams = new URLSearchParams(searchParams.toString());
+    urlParams.set("preview", content);
+    router.push(`${pathname}?${urlParams.toString()}`, { scroll: false });
+  };
 
   const isMovie = type === "movie";
   const [isFavorite, setIsFavorite] = useState<boolean>(
@@ -108,16 +115,12 @@ function MovieCard({
             src={`${POST_URL}${media.poster ? media.poster : media.backdrop}`}
             className="object-cover transition duration-300 group-hover:scale-[1.03] cursor-pointer"
             loading={loading}
-            onClick={() =>
-              dispatch(openPreview({ content: `${type}-${media.tmdbId}` }))
-            }
+            onClick={() => openPreview(`${type}-${media.tmdbId}`)}
           />
         ) : (
           <div
             className="flex h-full w-full items-center justify-center text-sm text-black/40 dark:text-white/40 cursor-pointer"
-            onClick={() =>
-              dispatch(openPreview({ content: `movie-${media.tmdbId}` }))
-            }
+            onClick={() => openPreview(`movie-${media.tmdbId}`)}
           >
             No image
           </div>

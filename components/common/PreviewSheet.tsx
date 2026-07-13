@@ -7,9 +7,10 @@ import { closePreview, openPreview } from "@/reduxStore/previewSheetSlice";
 import MovieSheet from "./MovieSheet";
 import SerieSheet from "./series/SerieSheet";
 import { MovieLoader } from "../core/SheetLoader";
+import { FaArrowLeft } from "react-icons/fa";
 
 function PreviewSheet() {
-  const { isOpen, previewContent } = useAppSelector((s) => s.previewSheet);
+  const { isOpen } = useAppSelector((s) => s.previewSheet);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -23,25 +24,6 @@ function PreviewSheet() {
 
   const prevPathname = useRef(pathname);
   const navigated = prevPathname.current !== pathname;
-
-  useEffect(() => {
-    if (navigated) return;
-    if (isOpen && currentPreview !== previewContent && previewContent) {
-      const urlParams = new URLSearchParams(searchParams.toString());
-
-      urlParams.set("preview", previewContent);
-
-      router.push(`${pathname}?${urlParams.toString()}`, { scroll: false });
-    }
-  }, [
-    navigated,
-    isOpen,
-    currentPreview,
-    previewContent,
-    pathname,
-    router,
-    searchParams,
-  ]);
 
   useEffect(() => {
     if (navigated) {
@@ -85,9 +67,12 @@ function PreviewSheet() {
       }`}
     >
       <div className="flex shrink-0 items-center justify-between border-b border-black/10 px-5 py-3 dark:border-white/10">
+        <div className="flex items-center gap-2">
+        <FaArrowLeft className="cursor-pointer text-[18px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white" onClick={() => router.back()}/> 
         <span className="text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
           {previewType} Preview
         </span>
+        </div>
         <IoClose
           className="cursor-pointer text-[28px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white"
           onClick={() => handleClosePreview()}
