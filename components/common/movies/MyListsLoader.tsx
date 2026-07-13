@@ -3,14 +3,14 @@ function ListCardSkeleton() {
     <div className="flex flex-col gap-4 rounded-xl border border-black/10 bg-black/2 p-4 dark:border-white/10 dark:bg-white/2">
       {/* Title row */}
       <div className="flex items-center gap-3">
-        <div className="h-[18px] w-[18px] shrink-0 animate-pulse rounded bg-black/10 dark:bg-white/10" />
+        <div className="h-4.5 w-4.5 shrink-0 animate-pulse rounded bg-black/10 dark:bg-white/10" />
         <div className="h-5 w-1/2 animate-pulse rounded bg-black/10 dark:bg-white/10" />
       </div>
 
       {/* Meta row: count + switch */}
       <div className="flex items-center justify-between">
         <div className="h-4 w-20 animate-pulse rounded bg-black/10 dark:bg-white/10" />
-        <div className="h-[22px] w-9 animate-pulse rounded-full bg-black/10 dark:bg-white/10" />
+        <div className="h-5.5 w-9 animate-pulse rounded-full bg-black/10 dark:bg-white/10" />
       </div>
 
       {/* Divider */}

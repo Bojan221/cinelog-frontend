@@ -14,8 +14,8 @@ import { useSearchParams } from "next/navigation";
 type TabId = "info" | "actors" | "episodes";
 
 const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
-  { id: "info", label: "Serie Info", icon: <FaInfoCircle size={15} /> },
-  { id: "actors", label: "Serie Actors", icon: <FaUsers size={15} /> },
+  { id: "info", label: "Info", icon: <FaInfoCircle size={15} /> },
+  { id: "actors", label: "Actors", icon: <FaUsers size={15} /> },
   { id: "episodes", label: "Episodes", icon: <FaListUl size={15} /> },
 ];
 
@@ -66,14 +66,14 @@ function SerieSheet({ serieId }: { serieId: string | null }) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200 cursor-pointer ${
+              className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg px-2 py-2 text-xs font-semibold transition-all duration-200 cursor-pointer sm:gap-2 sm:px-4 sm:text-sm ${
                 activeTab === tab.id
                   ? "bg-background text-black shadow-sm dark:text-white"
                   : "text-black/50 hover:text-black/80 dark:text-white/50 dark:hover:text-white/80"
               }`}
             >
-              {tab.icon}
-              {tab.label}
+              <span className="shrink-0">{tab.icon}</span>
+              <span className="truncate">{tab.label}</span>
             </button>
           ))}
         </div>

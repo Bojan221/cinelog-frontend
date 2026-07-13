@@ -170,7 +170,8 @@ function MovieInfo({ movie, genres, trailerLoaded, setTrailerLoaded }: Props) {
       <AddToListPopup
         isOpen={showAddToList}
         onClose={() => setShowAddToList(false)}
-        movie={movie}
+        media={movie}
+        type="movie"
       />
       {movie.overview ? (
         <div className="flex flex-col gap-3">

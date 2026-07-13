@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import { SerieDetail } from "@/types/serie";
 import { Genre } from "@/types/genre";
 import { getYearFromDate } from "@/utils/helpers";
@@ -7,6 +10,7 @@ import { formatRate, normalizeDate } from "@/utils/formatters";
 import DragScroll from "../DragScroll";
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { showToast } from "../Toast";
+import AddToListPopup from "../AddToListPopup";
 
 interface Props {
   serie: SerieDetail;
@@ -17,6 +21,7 @@ interface Props {
 
 function SerieInfo({ serie, genres, trailerLoaded, setTrailerLoaded }: Props) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
+  const [showAddToList, setShowAddToList] = useState(false);
 
   const serieGenres =
     serie.genres
@@ -168,11 +173,28 @@ function SerieInfo({ serie, genres, trailerLoaded, setTrailerLoaded }: Props) {
           </button>
         </div>
         <div>
-          <button className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600">
+          <button
+            className="flex items-center justify-center bg-red-500/90 rounded-md px-4 py-2 text-white font-semibold text-xs cursor-pointer transition-all duration-200 hover:bg-red-600"
+            onClick={() => setShowAddToList(true)}
+          >
             Add To Another List
           </button>
         </div>
       </div>
+
+      <AddToListPopup
+        isOpen={showAddToList}
+        onClose={() => setShowAddToList(false)}
+        type="tv"
+        media={{
+          tmdbId: serie.tmdbId,
+          title: serie.title,
+          overview: serie.overview,
+          poster: serie.poster,
+          releaseDate: serie.firstAirDate,
+          vote: serie.vote,
+        }}
+      />
       {serie.overview ? (
         <div className="flex flex-col gap-3">
           <h3 className="text-lg font-semibold text-black dark:text-white">

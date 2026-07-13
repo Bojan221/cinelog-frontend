@@ -13,12 +13,22 @@ import {
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { showToast } from "./Toast";
 import { List } from "@/types/list";
-import { Movie } from "@/types/movie";
+
+interface ListMedia {
+  tmdbId: number;
+  title: string;
+  overview: string;
+  poster: string;
+  releaseDate: string;
+  vote: number;
+  runtime?: number;
+}
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  movie: Movie;
+  media: ListMedia;
+  type?: "movie" | "tv";
 }
 
 function Spinner() {
@@ -27,7 +37,9 @@ function Spinner() {
   );
 }
 
-function AddToListPopup({ isOpen, onClose, movie }: Props) {
+function AddToListPopup({ isOpen, onClose, media, type = "movie" }: Props) {
+  const basePath = type === "tv" ? "/series" : "/movies";
+  const noun = type === "tv" ? "series" : "movie";
   const [lists, setLists] = useState<List[]>([]);
   const [loading, setLoading] = useState(false);
   const [addingId, setAddingId] = useState<number | null>(null);
@@ -41,7 +53,7 @@ function AddToListPopup({ isOpen, onClose, movie }: Props) {
       setAddedIds(new Set());
       try {
         const res = await axiosPrivate.get<{ lists: List[] }>(
-          "/movies/lists/myLists"
+          `${basePath}/lists/myLists`
         );
         if (active) setLists(res.data.lists ?? []);
       } catch {
@@ -69,15 +81,15 @@ function AddToListPopup({ isOpen, onClose, movie }: Props) {
     if (addingId || addedIds.has(list.id)) return;
     setAddingId(list.id);
     try {
-      await axiosPrivate.post("/movies/lists", {
-        movieId: movie.tmdbId,
+      await axiosPrivate.post(`${basePath}/lists`, {
+        [type === "tv" ? "serieId" : "movieId"]: media.tmdbId,
         listId: list.id,
-        title: movie.title,
-        overview: movie.overview,
-        poster: movie.poster,
-        releaseDate: movie.releaseDate,
-        vote: movie.vote,
-        runtime: movie.runtime,
+        title: media.title,
+        overview: media.overview,
+        poster: media.poster,
+        releaseDate: media.releaseDate,
+        vote: media.vote,
+        runtime: media.runtime,
       });
       setAddedIds((prev) => new Set(prev).add(list.id));
       showToast("success", `Added to "${list.name}"`);
@@ -172,7 +184,11 @@ function AddToListPopup({ isOpen, onClose, movie }: Props) {
                             <FaLock size={10} />
                           )}
                           {list.item_count}{" "}
-                          {list.item_count === 1 ? "movie" : "movies"}
+                          {noun === "series"
+                            ? "series"
+                            : list.item_count === 1
+                              ? "movie"
+                              : "movies"}
                         </span>
                       </span>
                       <span

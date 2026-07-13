@@ -50,7 +50,8 @@ function CreateList({ isOpen, onClose, type }: Props) {
 
     setSubmitting(true);
     try {
-      await axiosPrivate.post("/movies/lists/create", {
+      const basePath = type === "tv" ? "/series" : "/movies";
+      await axiosPrivate.post(`${basePath}/lists/create`, {
         name: name.trim(),
         isPublic: isPublic ? 1 : 0,
       });

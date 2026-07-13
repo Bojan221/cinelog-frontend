@@ -2,6 +2,7 @@
 
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSearchParams, usePathname } from "next/navigation";
 import { useNavigation } from "@/components/common/NavigationContext";
 
@@ -17,6 +18,7 @@ export default function PaginationRounded({
   const { navigate } = useNavigation();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isMobile = useMediaQuery("(max-width:640px)", { noSsr: true });
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -27,22 +29,30 @@ export default function PaginationRounded({
     navigate(`${pathname}?${params.toString()}`);
   };
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} sx={{ alignItems: "center" }}>
       <Pagination
         count={totalPages > 500 ? 500 : totalPages}
         page={currentPage}
         onChange={handlePageChange}
         variant="outlined"
         shape="rounded"
-        siblingCount={1}
+        size={isMobile ? "small" : "medium"}
+        siblingCount={isMobile ? 0 : 1}
         boundaryCount={1}
         sx={{
+          "& .MuiPagination-ul": {
+            flexWrap: "nowrap",
+          },
           "& .MuiPaginationItem-root": {
             color: "currentColor",
             borderColor: "currentColor",
             opacity: 0.55,
             fontWeight: 500,
             transition: "all .15s ease",
+            minWidth: { xs: 28, sm: 32 },
+            height: { xs: 28, sm: 32 },
+            margin: { xs: "0 2px", sm: "0 3px" },
+            fontSize: { xs: "0.75rem", sm: "0.875rem" },
             "&:hover": {
               opacity: 1,
               backgroundColor: "rgba(127,127,127,0.12)",
