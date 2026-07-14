@@ -1,18 +1,24 @@
+"use client";
 import { Actor } from "@/types/movie";
-import { Genre } from "@/types/genre";
 import Image from "next/image";
+import { usePreview } from "./usePreview";
 interface Props {
   actors: Actor[];
 }
 
 function MovieActors({ actors }: Props) {
   const PICTURE_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL
+  const openPreview = usePreview();
   return (
     <div className="grid h-full grid-cols-1 gap-5 overflow-y-auto px-4 py-3 thin-scrollbar sm:grid-cols-2 sm:px-6">
       {actors?.length > 0 ? (
-        actors.map((actor)=> { 
+        actors.map((actor)=> {
           return (
-            <div key={actor.id} className="flex gap-4">
+            <div
+              key={actor.id}
+              onClick={() => openPreview("actors", actor.id)}
+              className="flex cursor-pointer gap-4 rounded-lg p-1 transition-colors duration-200 hover:bg-black/3 dark:hover:bg-white/5"
+            >
               <div className="relative flex h-37.5 w-25 shrink-0 items-center justify-center overflow-hidden rounded-md border border-black/10 dark:border-white/15">
               {actor.profile ? (
                 <Image

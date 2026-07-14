@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { closePreview, openPreview } from "@/reduxStore/previewSheetSlice";
 import MovieSheet from "./MovieSheet";
 import SerieSheet from "./series/SerieSheet";
+import ActorSheet from "./actors/ActorSheet";
 import { MovieLoader } from "../core/SheetLoader";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -51,6 +52,8 @@ function PreviewSheet() {
             return <MovieSheet movieId={previewId || null}/>;
         case "tv":
             return <SerieSheet serieId={previewId || null}/>
+        case "actors":
+            return <ActorSheet actorId={previewId || null}/>
         default :
         return <MovieLoader/>
     } 
@@ -70,7 +73,7 @@ function PreviewSheet() {
         <div className="flex items-center gap-2">
         <FaArrowLeft className="cursor-pointer text-[18px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white" onClick={() => router.back()}/> 
         <span className="text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
-          {previewType} Preview
+          {previewType === "actors" ? "Actor" : previewType} Preview
         </span>
         </div>
         <IoClose

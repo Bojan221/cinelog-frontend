@@ -119,7 +119,8 @@ function SerieEpisodes({ serie }: Props) {
 
   const toggleEpisodeWatched = async (
     seasonNumber: number,
-    episodeNumber: number
+    episodeNumber: number,
+    poster: string | null
   ) => {
     const key = `${seasonNumber}-${episodeNumber}`;
     if (togglingEpisodes.has(key)) return;
@@ -130,13 +131,13 @@ function SerieEpisodes({ serie }: Props) {
     const nextWatched = !wasWatched;
 
     setTogglingEpisodes((prev) => new Set(prev).add(key));
-    setEpisodeWatched(seasonNumber, episodeNumber, nextWatched); 
+    setEpisodeWatched(seasonNumber, episodeNumber, nextWatched);
 
     try {
       if (nextWatched) {
         const { data } = await axiosPrivate.post(
           `/series/${serie.tmdbId}/episodes/watched`,
-          { seasonNumber, episodeNumber }
+          { seasonNumber, episodeNumber, poster }
         );
         if (data?.seasonCompleted) setSeasonCompleted(seasonNumber, true);
       } else {
@@ -340,7 +341,8 @@ function SerieEpisodes({ serie }: Props) {
                                     onClick={() =>
                                       toggleEpisodeWatched(
                                         season.seasonNumber,
-                                        episode.episodeNumber
+                                        episode.episodeNumber,
+                                        episode.still ?? null
                                       )
                                     }
                                     disabled={epToggling}
