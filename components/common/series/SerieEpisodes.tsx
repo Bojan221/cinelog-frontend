@@ -4,9 +4,10 @@ import Image from "next/image";
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { SerieDetail, Episode } from "@/types/serie";
 import { getYearFromDate } from "@/utils/helpers";
-import { FaChevronDown, FaStar } from "react-icons/fa";
+import { FaChevronDown, FaStar, FaRegEye } from "react-icons/fa";
 import { FaCircleCheck, FaRegCircle, FaCheck } from "react-icons/fa6";
 import { showToast } from "../Toast";
+import { usePreview } from "../usePreview";
 
 interface Props {
   serie: SerieDetail;
@@ -14,6 +15,7 @@ interface Props {
 
 function SerieEpisodes({ serie }: Props) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
+  const openPreview = usePreview();
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
   const [episodes, setEpisodes] = useState<Record<number, Episode[]>>({});
   const [loading, setLoading] = useState<Set<number>>(new Set());
@@ -176,8 +178,16 @@ function SerieEpisodes({ serie }: Props) {
               key={season.id}
               className="w-full shrink-0 overflow-hidden rounded-lg border border-black/10 dark:border-white/15"
             >
-              <button
+              <div
+                role="button"
+                tabIndex={0}
                 onClick={() => toggle(season.id, season.seasonNumber)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggle(season.id, season.seasonNumber);
+                  }
+                }}
                 className="flex w-full items-center gap-4 px-4 py-3 text-left cursor-pointer transition-colors duration-200 hover:bg-black/3 dark:hover:bg-white/5"
               >
                 <div className="relative h-18 w-12 shrink-0 overflow-hidden rounded-md border border-black/10 dark:border-white/15">
@@ -218,13 +228,28 @@ function SerieEpisodes({ serie }: Props) {
                     Completed
                   </span>
                 ) : null}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openPreview(
+                      "season",
+                      `${serie.tmdbId}-${season.seasonNumber}`
+                    );
+                  }}
+                  title="Preview season"
+                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 px-2.5 py-1 text-[11px] font-semibold text-black/60 transition-colors duration-200 hover:border-black/25 hover:bg-black/5 hover:text-black cursor-pointer dark:border-white/15 dark:text-white/60 dark:hover:border-white/30 dark:hover:bg-white/10 dark:hover:text-white"
+                >
+                  <FaRegEye size={12} />
+                  Preview
+                </button>
                 <FaChevronDown
                   size={14}
                   className={`shrink-0 text-black/40 transition-transform duration-200 dark:text-white/40 ${
                     isOpen ? "rotate-180" : ""
                   }`}
                 />
-              </button>
+              </div>
 
               <div
                 className={`grid transition-all duration-300 ease-in-out ${
@@ -336,6 +361,20 @@ function SerieEpisodes({ serie }: Props) {
                                       {episode.vote.toFixed(1)}
                                     </span>
                                   ) : null}
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      openPreview(
+                                        "episode",
+                                        `${serie.tmdbId}-${season.seasonNumber}-${episode.episodeNumber}`
+                                      )
+                                    }
+                                    title="Preview episode"
+                                    aria-label="Preview episode"
+                                    className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-black/30 transition-colors duration-200 hover:bg-black/5 hover:text-black cursor-pointer dark:text-white/30 dark:hover:bg-white/10 dark:hover:text-white"
+                                  >
+                                    <FaRegEye size={13} />
+                                  </button>
                                   <button
                                     type="button"
                                     onClick={() =>

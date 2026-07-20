@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { normalizeDate, formatRate } from "@/utils/formatters";
+import { usePreview } from "../usePreview";
 
 interface Episode {
   created_at: string;
@@ -24,14 +24,13 @@ interface Episode {
 
 function HomePageCard({ episode }: { episode: Episode }) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const preview = usePreview();
 
   const openPreview = () => {
-    const urlParams = new URLSearchParams(searchParams.toString());
-    urlParams.set("preview", `${episode.type || "tv"}-${episode.tmdbId}`);
-    router.push(`${pathname}?${urlParams.toString()}`, { scroll: false });
+    preview(
+      "episode",
+      `${episode.tmdbId}-${episode.season_number}-${episode.episode_number}`
+    );
   };
 
   const seasonEpisode = `S${String(episode.season_number).padStart(

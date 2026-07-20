@@ -104,7 +104,89 @@ export interface Review {
     createdAt: string
 }
 
-export interface Keyword { 
+export interface Keyword {
     id: number,
     name: string
+}
+
+export interface ProductionCountry {
+    iso: string,
+    name: string
+}
+
+export interface SimilarMovie {
+    tmdbId: number,
+    title: string,
+    poster: string | null,
+    releaseDate: string,
+    vote: number
+}
+
+export interface Collection {
+    id: number,
+    name: string,
+    poster: string | null,
+    backdrop: string | null
+}
+
+export interface WatchProvider {
+    id: number,
+    name: string,
+    logo: string | null
+}
+
+export interface WatchProviders {
+    link?: string,
+    flatrate?: WatchProvider[],
+    rent?: WatchProvider[],
+    buy?: WatchProvider[]
+}
+
+// Full payload returned by GET /movies/:id -> { movie: MovieDetail }
+export interface MovieDetail {
+    tmdbId: number,
+    title: string,
+    originalTitle: string,
+    overview: string,
+    tagline: string,
+    poster: string | null,
+    backdrop: string | null,
+    releaseDate: string,
+    runtime: number,
+    status: string,
+    vote: number,
+    voteCount: number,
+    popularity: number,
+    homepage: string,
+    imdbId: string,
+    adult: boolean,
+    video: boolean,
+    budget: number,
+    revenue: number,
+    originalLanguage: string,
+    originCountry: string[],
+    certification: string | null,
+    collection: Collection | null,
+    genres: Genre[],
+    productionCompanies: Companies[],
+    productionCountries: ProductionCountry[],
+    spokenLanguages: Languages[],
+    actors: Actor[],
+    director: Director | null,
+    writers: Writter[],
+    trailer: Trailer | null,
+    videos: Trailer[],
+    images: Images,
+    externalIds: {
+        imdb: string | null,
+        facebook: string | null,
+        instagram: string | null,
+        twitter: string | null,
+        wikidata: string | null
+    },
+    watchProviders: WatchProviders | null,
+    similarMovies: SimilarMovie[],
+    recommendedMovies: SimilarMovie[],
+    reviews: Review[],
+    keywords: Keyword[]
 }
