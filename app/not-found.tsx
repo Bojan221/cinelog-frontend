@@ -7,7 +7,7 @@ export default function NotFound() {
 
       <div className="relative h-full w-full overflow-hidden rounded-xl">
         <Image
-          src="/404-page.png"
+          src="/wallpaper.jpg"
           alt=""
           fill
           priority
