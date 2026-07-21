@@ -176,7 +176,11 @@ function SerieEpisodes({ serie }: Props) {
           return (
             <div
               key={season.id}
-              className="w-full shrink-0 overflow-hidden rounded-lg border border-black/10 dark:border-white/15"
+              className={`w-full shrink-0 overflow-hidden rounded-lg border ${
+                isCompleted
+                  ? "border-emerald-500/40 bg-emerald-500/5"
+                  : "border-black/10 dark:border-white/15"
+              }`}
             >
               <div
                 role="button"
@@ -204,11 +208,24 @@ function SerieEpisodes({ serie }: Props) {
                       No image
                     </div>
                   )}
+                  {isCompleted ? (
+                    <span className="absolute inset-0 flex items-center justify-center bg-emerald-500/35 backdrop-blur-[1px]">
+                      <FaCircleCheck className="text-white drop-shadow" size={20} />
+                    </span>
+                  ) : null}
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className="truncate text-sm font-semibold text-black/90 dark:text-white/90">
-                    {season.name}
-                  </span>
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span className="truncate text-sm font-semibold text-black/90 dark:text-white/90">
+                      {season.name}
+                    </span>
+                    {isCompleted ? (
+                      <span className="flex shrink-0 items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                        <FaCircleCheck size={11} />
+                        Completed
+                      </span>
+                    ) : null}
+                  </div>
                   <span className="flex items-center gap-2 text-xs font-medium text-black/50 dark:text-white/50">
                     {season.airDate ? (
                       <>
@@ -222,12 +239,6 @@ function SerieEpisodes({ serie }: Props) {
                     </span>
                   </span>
                 </div>
-                {isCompleted ? (
-                  <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-linear-to-r from-emerald-500 to-green-600 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-md shadow-emerald-500/30">
-                    <FaCircleCheck size={12} />
-                    Completed
-                  </span>
-                ) : null}
                 <button
                   type="button"
                   onClick={(e) => {
@@ -238,10 +249,11 @@ function SerieEpisodes({ serie }: Props) {
                     );
                   }}
                   title="Preview season"
-                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 px-2.5 py-1 text-[11px] font-semibold text-black/60 transition-colors duration-200 hover:border-black/25 hover:bg-black/5 hover:text-black cursor-pointer dark:border-white/15 dark:text-white/60 dark:hover:border-white/30 dark:hover:bg-white/10 dark:hover:text-white"
+                  aria-label="Preview season"
+                  className="flex shrink-0 items-center gap-1.5 rounded-full border border-black/10 p-2 text-[11px] font-semibold text-black/60 transition-colors duration-200 hover:border-black/25 hover:bg-black/5 hover:text-black cursor-pointer sm:px-2.5 sm:py-1 dark:border-white/15 dark:text-white/60 dark:hover:border-white/30 dark:hover:bg-white/10 dark:hover:text-white"
                 >
-                  <FaRegEye size={12} />
-                  Preview
+                  <FaRegEye size={13} />
+                  <span className="hidden sm:inline">Preview</span>
                 </button>
                 <FaChevronDown
                   size={14}
@@ -304,7 +316,7 @@ function SerieEpisodes({ serie }: Props) {
                           return (
                           <div
                             key={episode.id}
-                            className={`relative flex flex-col gap-3 overflow-hidden rounded-lg border p-2 transition-all duration-300 sm:flex-row ${
+                            className={`relative flex flex-row gap-3 overflow-hidden rounded-lg border p-2 transition-all duration-300 ${
                               epWatched
                                 ? "border-emerald-500/40 bg-emerald-500/8 shadow-sm shadow-emerald-500/10"
                                 : "border-black/5 dark:border-white/10"
@@ -315,13 +327,13 @@ function SerieEpisodes({ serie }: Props) {
                                 epWatched ? "opacity-100" : "opacity-0"
                               }`}
                             />
-                            <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-md border border-black/10 dark:border-white/15 sm:h-16 sm:w-28">
+                            <div className="relative h-13 w-22 shrink-0 overflow-hidden rounded-md border border-black/10 dark:border-white/15 sm:h-16 sm:w-28">
                               {episode.still ? (
                                 <Image
                                   alt={episode.name}
                                   src={`${POST_URL}${episode.still}`}
                                   fill
-                                  sizes="(max-width: 640px) 100vw, 112px"
+                                  sizes="112px"
                                   className={`object-cover transition-all duration-300 ${
                                     epWatched ? "brightness-50 saturate-150" : ""
                                   }`}
