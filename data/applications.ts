@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons";
 import { FaRegBookmark, FaRegHeart, FaList } from "react-icons/fa";
-import { FaRegCircleCheck, FaRegCalendar, FaChartColumn, FaGear } from "react-icons/fa6";
+import { FaRegCircleCheck, FaRegCalendar, FaChartColumn,FaGear } from "react-icons/fa6";
 import { RiProgress5Line} from "react-icons/ri";
 import { BsCollectionPlayFill } from "react-icons/bs";
 
@@ -90,9 +90,9 @@ export const applications: AppGroup[] = [
     filter: 'other',
     pages: [
       {
-        name: "Calendar",
-        link: "/other/calendar",
-        icon: FaRegCalendar,
+        name: "Public Lists",
+        link: "/lists",
+        icon: FaList,
       },
       {
         name: "Stats",

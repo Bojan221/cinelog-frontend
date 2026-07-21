@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import HomeList from "@/components/common/home/HomeList";
 import HomeLoader from "@/components/common/home/HomeLoader";
 import { TopMediaItem } from "@/components/common/home/TopMediaCard";
+import { UpNextItem } from "@/components/common/home/UpNextCard";
 
 interface Episode {
   created_at: string;
@@ -23,6 +24,7 @@ interface Episode {
 
 type RecentTvResponse = { episodes: Episode[] };
 type TopMediaResponse = { name: string; data: TopMediaItem[] }[];
+type UpNextResponse = { upNext: UpNextItem[] };
 
 export default async function Home() {
   return (
@@ -33,18 +35,26 @@ export default async function Home() {
 }
 
 async function HomeDashboards() {
+  await requireServerAuth();
+
   let recentTvResponse: RecentTvResponse = { episodes: [] };
   let topData: TopMediaResponse = [];
+  let upNext: UpNextResponse = { upNext: [] };
   try {
-    await requireServerAuth();
-
     recentTvResponse = await serverFetch<RecentTvResponse>(
       "dashboards/recentlyTvEpisode"
     );
     topData = await serverFetch<TopMediaResponse>("dashboards/topMedia");
+    upNext = await serverFetch<UpNextResponse>("dashboards/upNext");
   } catch (err) {
     console.error(err);
   }
 
-  return <HomeList topList={topData} userRecent={recentTvResponse}/>;
+  return (
+    <HomeList
+      topList={topData}
+      userRecent={recentTvResponse}
+      upNext={upNext.upNext ?? []}
+    />
+  );
 }

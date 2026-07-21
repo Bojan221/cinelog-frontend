@@ -59,13 +59,13 @@ function EpisodeSheet({ serieId, seasonNumber, episodeNumber }: Props) {
 
   return (
     <div className="flex h-full flex-col gap-5 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6">
-      <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/5">
+      <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-xl border border-black/10 bg-black/5 dark:border-white/15 dark:bg-white/5">
         {episode.still ? (
           <Image
             alt={episode.name}
             src={`${POST_URL}${episode.still}`}
             fill
-            sizes="(max-width: 768px) 100vw, 640px"
+            sizes="(min-width: 768px) 42vw, 100vw"
             className="object-cover"
           />
         ) : (

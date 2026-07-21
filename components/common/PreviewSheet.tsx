@@ -99,7 +99,7 @@ function PreviewSheet() {
     >
       <div className="flex shrink-0 items-center justify-between border-b border-black/10 px-5 py-3 dark:border-white/10">
         <div className="flex items-center gap-2">
-        <FaArrowLeft className="cursor-pointer text-[16px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white" onClick={() => router.back()}/> 
+        <FaArrowLeft className="cursor-pointer text-[18px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white" onClick={() => router.back()}/> 
         <span className="text-sm font-semibold uppercase tracking-wide text-black/50 dark:text-white/50">
           {(previewType && PREVIEW_LABELS[previewType]) || previewType} Preview
         </span>
@@ -109,7 +109,7 @@ function PreviewSheet() {
             <FaArrowUpRightFromSquare
               title={previewType === "tv" ? "Open series page" : "Open movie page"}
               onClick={handleOpenPage}
-              className="cursor-pointer text-[22px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white"
+              className="cursor-pointer text-[18px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white"
             />
           ) : null}
         <IoClose

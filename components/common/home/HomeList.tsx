@@ -7,6 +7,8 @@ import { LuCalendarClock } from "react-icons/lu";
 import HomePageCard from "./HomePageCard";
 import MediaRail from "./MediaRail";
 import TopMediaCard, { TopMediaItem } from "./TopMediaCard";
+import UpNextList from "./UpNextList";
+import { UpNextItem } from "./UpNextCard";
 
 const CATEGORY_ICONS: Record<string, ReactNode> = {
   "Top Rated": <FaStar className="text-[22px] text-amber-400" />,
@@ -36,13 +38,15 @@ interface Episode {
 interface Props {
   userRecent: { episodes: Episode[] };
   topList: { name: string; data: TopMediaItem[] }[];
+  upNext: UpNextItem[];
 }
 
-function HomeList({ userRecent, topList }: Props) {
+function HomeList({ userRecent, topList, upNext }: Props) {
   const episodes = userRecent.episodes;
-
   return (
     <div className="flex w-full flex-col gap-10 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <UpNextList initial={upNext} />
+
       {episodes.length >= 3 && (
         <MediaRail
           title="Recently Watched Episodes"
