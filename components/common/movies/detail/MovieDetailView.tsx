@@ -14,6 +14,9 @@ import DetailRail from "./DetailRail";
 import CastCard from "./CastCard";
 import MovieMiniCard from "./MovieMiniCard";
 import MovieReviews from "./MovieReviews";
+import PhotoGallery from "./PhotoGallery";
+import DetailActions from "../../DetailActions";
+import CommentsSection from "../../CommentsSection";
 
 const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
 
@@ -150,6 +153,17 @@ function MovieDetailView({ movie }: { movie: MovieDetail }) {
               ) : null}
 
               <RatingRing vote={movie.vote} voteCount={movie.voteCount} />
+
+              <DetailActions
+                type="movie"
+                tmdbId={movie.tmdbId}
+                title={movie.title}
+                overview={movie.overview}
+                poster={movie.poster}
+                releaseDate={movie.releaseDate}
+                vote={movie.vote}
+                runtime={movie.runtime}
+              />
             </div>
           </header>
 
@@ -219,6 +233,9 @@ function MovieDetailView({ movie }: { movie: MovieDetail }) {
               ))}
             </DetailRail>
           ) : null}
+
+          {/* Photos */}
+          <PhotoGallery images={movie.images?.backdrops ?? []} />
 
           {/* Production companies */}
           {movie.productionCompanies?.some((c) => c.logo) ? (
@@ -292,6 +309,9 @@ function MovieDetailView({ movie }: { movie: MovieDetail }) {
               </div>
             </section>
           ) : null}
+        </div>
+        <div className="pt-10 px-5">
+        <CommentsSection mediaId={movie.tmdbId} mediaType="movie"/>
         </div>
       </div>
     </div>

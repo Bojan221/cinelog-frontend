@@ -4,9 +4,10 @@ import Image from "next/image";
 import { ListDetail, ListItem } from "@/types/list";
 import { FaArrowLeft, FaRegRectangleList, FaFilm, FaTv } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa";
-import { getInitials, normalizeDate, formatRate } from "@/utils/formatters";
+import { normalizeDate, formatRate } from "@/utils/formatters";
 import { getYearFromDate } from "@/utils/helpers";
 import { usePreview } from "../usePreview";
+import Avatar from "@/components/core/Avatar";
 import NoDataIndicator from "../NoDataIndicator";
 
 export interface PublicListDetailData {
@@ -92,21 +93,11 @@ function PublicListDetail({ data }: { data: PublicListDetailData }) {
               {list.name}
             </h1>
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-black/50 dark:text-white/50">
-              <span className="flex items-center gap-2">
-                {user?.avatar ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={user.avatar}
-                    alt={ownerLabel}
-                    className="h-6 w-6 rounded-full object-cover"
-                  />
-                ) : (
-                  <span className="grid h-6 w-6 place-items-center rounded-full bg-black/10 text-[10px] font-bold text-black/60 dark:bg-white/15 dark:text-white/70">
-                    {getInitials(ownerLabel)}
-                  </span>
-                )}
-                {user?.username ? `@${user.username}` : ownerLabel}
-              </span>
+              <Avatar
+                size="sm"
+                fullName={ownerLabel}
+                profilePicture={user?.avatar ?? undefined}
+              />
               <span aria-hidden>·</span>
               <span className="inline-flex items-center gap-1.5">
                 {isTv ? <FaTv size={12} /> : <FaFilm size={12} />}

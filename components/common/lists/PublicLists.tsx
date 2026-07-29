@@ -3,8 +3,8 @@ import Link from "next/link";
 import { List } from "@/types/list";
 import { FaRegRectangleList, FaUserGroup } from "react-icons/fa6";
 import { FaFilm, FaTv } from "react-icons/fa";
-import { getInitials } from "@/utils/formatters";
 import { normalizeDate } from "@/utils/formatters";
+import Avatar from "@/components/core/Avatar";
 import NoDataIndicator from "../NoDataIndicator";
 
 interface Props {
@@ -16,22 +16,7 @@ function OwnerBadge({ user }: { user: List["user"] }) {
   const label = fullName || user?.username || "Unknown";
 
   return (
-    <div className="flex items-center gap-2">
-      {user?.avatar ? (
-        <img
-          src={user.avatar}
-          alt={label}
-          className="h-6 w-6 rounded-full object-cover"
-        />
-      ) : (
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-black/10 text-[10px] font-bold text-black/60 dark:bg-white/15 dark:text-white/70">
-          {getInitials(label)}
-        </span>
-      )}
-      <span className="truncate text-xs font-medium text-black/60 dark:text-white/60">
-        {user?.username ? `@${user.username}` : label}
-      </span>
-    </div>
+    <Avatar size="sm" fullName={label} profilePicture={user?.avatar ?? undefined} />
   );
 }
 

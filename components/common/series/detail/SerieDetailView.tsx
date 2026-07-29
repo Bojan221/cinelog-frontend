@@ -14,6 +14,8 @@ import RatingRing from "../../RatingRing";
 import DetailRail from "../../movies/detail/DetailRail";
 import CastCard from "../../movies/detail/CastCard";
 import MovieReviews from "../../movies/detail/MovieReviews";
+import PhotoGallery from "../../movies/detail/PhotoGallery";
+import DetailActions from "../../DetailActions";
 import SerieMiniCard from "./SerieMiniCard";
 import SerieEpisodes from "../SerieEpisodes";
 
@@ -168,6 +170,16 @@ function SerieDetailView({ serie }: { serie: SerieDetail }) {
               ) : null}
 
               <RatingRing vote={serie.vote} voteCount={serie.voteCount} />
+
+              <DetailActions
+                type="tv"
+                tmdbId={serie.tmdbId}
+                title={serie.title}
+                overview={serie.overview}
+                poster={serie.poster}
+                releaseDate={serie.firstAirDate}
+                vote={serie.vote}
+              />
             </div>
           </header>
 
@@ -292,6 +304,9 @@ function SerieDetailView({ serie }: { serie: SerieDetail }) {
               </div>
             </section>
           ) : null}
+
+          {/* Photos */}
+          <PhotoGallery images={serie.images?.backdrops ?? []} />
 
           {/* Seasons & Episodes */}
           {serie.seasons?.length ? (

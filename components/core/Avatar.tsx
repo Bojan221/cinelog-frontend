@@ -34,7 +34,16 @@ function Avatar({ size, fullName, profilePicture }: AvatarProps) {
   return (
     <div className="flex gap-2 items-center">
       {profilePicture ? (
-        <Image src={profilePicture} alt={fullName} />
+        <div className={`relative overflow-hidden rounded-full ${sizeClasses[size]}`}>
+          <Image
+            src={profilePicture}
+            alt={fullName}
+            fill
+            sizes="56px"
+            className="object-cover"
+            unoptimized
+          />
+        </div>
       ) : (
         <div className={`bg-red-300/80 rounded-full flex items-center justify-center text-center ${sizeClasses[size]}`}>
           {getInitials(fullName)}
