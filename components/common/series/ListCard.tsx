@@ -88,7 +88,7 @@ function ListCard({ list, onView, onDelete }: Props) {
           </h3>
           <FaPen
             size={16}
-            className="mb-1 shrink-0 cursor-pointer text-white/30"
+            className="mb-1 shrink-0 cursor-pointer text-black/30 dark:text-white/30"
             onClick={() => setShowEditPopup(true)}
           />
         </div>

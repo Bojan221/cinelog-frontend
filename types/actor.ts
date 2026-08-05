@@ -30,6 +30,17 @@ export interface ActorTvCredit {
     episodeCount: number;
 }
 
+export interface ActorListItem {
+    tmdbId: number;
+    name: string;
+    gender: number;
+    profile: string | null;
+    knownForDepartment: string;
+    popularity: number;
+    movieCredits: ActorMovieCredit[];
+    tvCredits: ActorTvCredit[];
+}
+
 export interface ActorExternalIds {
     imdb: string | null;
     wikidata: string | null;

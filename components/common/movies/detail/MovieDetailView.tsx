@@ -17,6 +17,7 @@ import MovieReviews from "./MovieReviews";
 import PhotoGallery from "./PhotoGallery";
 import DetailActions from "../../DetailActions";
 import CommentsSection from "../../CommentsSection";
+import UserRating from "../../UserRating";
 
 const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
 
@@ -103,7 +104,8 @@ function MovieDetailView({ movie }: { movie: MovieDetail }) {
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-4">
-              <div className="flex flex-col gap-2">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-extrabold tracking-tight text-black sm:text-5xl dark:text-white">
                   {movie.title}
                   {year ? (
@@ -137,6 +139,12 @@ function MovieDetailView({ movie }: { movie: MovieDetail }) {
                     </span>
                   ) : null}
                 </div>
+                </div>
+                <UserRating
+                  mediaId={movie.tmdbId}
+                  mediaType="movie"
+                  myVote={movie.myVote}
+                />
               </div>
 
               {movie.genres?.length ? (
@@ -310,7 +318,7 @@ function MovieDetailView({ movie }: { movie: MovieDetail }) {
             </section>
           ) : null}
         </div>
-        <div className="pt-10 px-5">
+        <div className="pt-10">
         <CommentsSection mediaId={movie.tmdbId} mediaType="movie"/>
         </div>
       </div>

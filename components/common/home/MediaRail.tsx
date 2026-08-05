@@ -25,7 +25,7 @@ function MediaRail({ title, icon, children }: Props) {
     <div className="flex w-full flex-col gap-4">
       <div className="flex items-center gap-2.5 px-1">
         {icon}
-        <h2 className="text-2xl font-bold tracking-tight text-white">
+        <h2 className="text-2xl font-bold tracking-tight text-black dark:text-white">
           {title}
         </h2>
       </div>

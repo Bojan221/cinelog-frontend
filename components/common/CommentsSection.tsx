@@ -55,6 +55,38 @@ function CommentsSection({ mediaType, mediaId }: CommentsProps) {
     }
   };
 
+  const updateComment = async () => {
+    const next = editingContent?.trim()
+    if(!next) {
+      return showToast("error","Comment cant be empty")
+    }
+
+    const id = editing
+    const previous = comments
+
+    setComments((prev) => prev.map((c) => (c.id === id ? { ...c, content: next } : c)))
+    setEditing(null)
+    setEditingContent(null)
+
+    try {
+      const response = await axiosPrivate.patch(`/comments/${id}`,{content: next})
+      const updated = response.data.comment
+      setComments((prev) => prev.map((c) => (c.id === id ? updated : c)))
+      showToast("success", "Successifully updated comment")
+    } catch {
+      setComments(previous) 
+      showToast("error","Error with updating comment")
+    }
+  }
+  const deleteComment = async(id:number) => {
+    try {
+      const response = await axiosPrivate.delete(`/comments/${id}`)
+      setComments((prev)=> prev.filter((c)=> c.id !== id))
+      showToast("success","Comment deleted successfully")
+    }catch{
+      showToast("error","Error deleting comment")
+    }
+  }
   return (
     <section className="flex w-full flex-col gap-5">
       <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-black dark:text-white">
@@ -100,6 +132,7 @@ function CommentsSection({ mediaType, mediaId }: CommentsProps) {
                       </button>
                       <button
                         type="button"
+                        onClick={()=> deleteComment(comment.id)}
                         aria-label="Delete comment"
                         className="grid h-7 w-7 place-items-center rounded-full text-black/40 transition-colors hover:bg-red-500/10 hover:text-red-500 dark:text-white/40 cursor-pointer"
                       >
@@ -115,6 +148,7 @@ function CommentsSection({ mediaType, mediaId }: CommentsProps) {
                     type="text"
                     autoFocus
                     value={editingContent || ""}
+                    onKeyDown={(e)=> e.key === "Enter" && updateComment()}
                     onChange={(e) => setEditingContent(e.target.value)}
                     placeholder="Edit your comment..."
                     className="w-full rounded-lg border border-black/15 bg-background px-3 py-2 text-sm text-black/80 transition-colors placeholder:text-black/30 focus:border-red-500/60 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-white/15 dark:text-white/90 dark:placeholder:text-white/30"
@@ -132,6 +166,7 @@ function CommentsSection({ mediaType, mediaId }: CommentsProps) {
                     </button>
                     <button
                       type="button"
+                      onClick={()=> updateComment()}
                       disabled={
                         !editingContent?.trim() ||
                         editingContent.trim() === comment.content

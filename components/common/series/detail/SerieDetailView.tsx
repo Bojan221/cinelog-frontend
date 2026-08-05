@@ -16,8 +16,10 @@ import CastCard from "../../movies/detail/CastCard";
 import MovieReviews from "../../movies/detail/MovieReviews";
 import PhotoGallery from "../../movies/detail/PhotoGallery";
 import DetailActions from "../../DetailActions";
+import UserRating from "../../UserRating";
 import SerieMiniCard from "./SerieMiniCard";
 import SerieEpisodes from "../SerieEpisodes";
+import CommentsSection from "../../CommentsSection";
 
 const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
 
@@ -110,7 +112,8 @@ function SerieDetailView({ serie }: { serie: SerieDetail }) {
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-4">
-              <div className="flex flex-col gap-2">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-2">
                 <h1 className="text-3xl font-extrabold tracking-tight text-black sm:text-5xl dark:text-white">
                   {serie.title}
                   {year ? (
@@ -154,6 +157,12 @@ function SerieDetailView({ serie }: { serie: SerieDetail }) {
                     </span>
                   ) : null}
                 </div>
+                </div>
+                <UserRating
+                  mediaId={serie.tmdbId}
+                  mediaType="tv"
+                  myVote={serie.myVote}
+                />
               </div>
 
               {serie.genres?.length ? (
@@ -364,6 +373,9 @@ function SerieDetailView({ serie }: { serie: SerieDetail }) {
               </div>
             </section>
           ) : null}
+        </div>
+        <div className="pt-10">
+          <CommentsSection mediaId={serie.tmdbId} mediaType="tv"/>
         </div>
       </div>
     </div>

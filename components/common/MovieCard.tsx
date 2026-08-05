@@ -10,6 +10,7 @@ import { Serie } from "@/types/serie";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import axiosPrivate from "@/app/api/axiosPrivate";
 import { showToast } from "./Toast";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 interface CardProps {
   media: Movie | Serie;
@@ -100,7 +101,7 @@ function MovieCard({
 
   return (
     <div
-      className={`group flex flex-col gap-3 border rounded-xl border-black/10 dark:border-white/10 transition-all duration-300 ease-out ${
+      className={`group relative flex flex-col gap-3 border rounded-xl border-black/10 dark:border-white/10 transition-all duration-300 ease-out ${
         isExiting
           ? "scale-90 opacity-0 pointer-events-none"
           : "scale-100 opacity-100"
@@ -200,6 +201,17 @@ function MovieCard({
           </p>
         )}
       </div>
+
+      <button
+        type="button"
+        aria-label="Open details page"
+        onClick={() =>
+          router.push(`/${type === "tv" ? "series" : "movies"}/${media.tmdbId}`)
+        }
+        className="absolute bottom-2 right-2 grid h-8 w-8 place-items-center rounded-full text-black/40 transition-colors hover:bg-black/5 hover:text-black cursor-pointer dark:text-white/40 dark:hover:bg-white/10 dark:hover:text-white"
+      >
+        <FaArrowUpRightFromSquare size={13} />
+      </button>
     </div>
   );
 }

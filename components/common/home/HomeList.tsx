@@ -17,7 +17,7 @@ const CATEGORY_ICONS: Record<string, ReactNode> = {
 };
 
 const getCategoryIcon = (name: string): ReactNode =>
-  CATEGORY_ICONS[name] ?? <FaFilm className="text-[22px] text-white/70" />;
+  CATEGORY_ICONS[name] ?? <FaFilm className="text-[22px] text-black/50 dark:text-white/70" />;
 
 interface Episode {
   created_at: string;

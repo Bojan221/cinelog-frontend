@@ -155,6 +155,7 @@ export interface MovieDetail {
     runtime: number,
     status: string,
     vote: number,
+    myVote: number | null,
     voteCount: number,
     popularity: number,
     homepage: string,

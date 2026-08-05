@@ -46,6 +46,7 @@ export interface SerieDetail {
     numberOfSeasons: number,
     numberOfEpisodes: number,
     vote: number,
+    myVote: number | null,
     voteCount: number,
     popularity: number,
     homepage: string,

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { normalizeDate, formatRate } from "@/utils/formatters";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 export interface TopMediaItem {
   id: number;
@@ -36,7 +37,7 @@ function TopMediaCard({ item }: { item: TopMediaItem }) {
   return (
     <div
       onClick={openPreview}
-      className="group flex w-36 shrink-0 cursor-pointer snap-start flex-col gap-3 rounded-xl border border-black/10 transition-all duration-300 ease-out dark:border-white/10 sm:w-40"
+      className="group relative flex w-36 shrink-0 cursor-pointer snap-start flex-col gap-3 rounded-xl border border-black/10 transition-all duration-300 ease-out dark:border-white/10 sm:w-40"
     >
       <div className="relative aspect-2/3 w-full overflow-hidden rounded-xl bg-black/5 ring-1 ring-black/10 transition duration-300 group-hover:shadow-lg group-hover:shadow-black/20 group-hover:ring-black/25 dark:bg-white/5 dark:ring-white/10 dark:group-hover:shadow-black/40 dark:group-hover:ring-white/25">
         {item.poster_path ? (
@@ -77,6 +78,17 @@ function TopMediaCard({ item }: { item: TopMediaItem }) {
           </p>
         )}
       </div>
+      <button
+        type="button"
+        aria-label="Open details page"
+        onClick={(e) => {
+          e.stopPropagation();
+          router.push(`/${type === "tv" ? "series" : "movies"}/${item.id}`);
+        }}
+        className="absolute bottom-2 right-2 grid h-8 w-8 place-items-center rounded-full text-black/40 transition-colors hover:bg-black/5 hover:text-black cursor-pointer dark:text-white/40 dark:hover:bg-white/10 dark:hover:text-white"
+      >
+        <FaArrowUpRightFromSquare size={13} />
+      </button>
     </div>
   );
 }

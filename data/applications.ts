@@ -3,7 +3,7 @@ import { FaRegBookmark, FaRegHeart, FaList } from "react-icons/fa";
 import { FaRegCircleCheck, FaRegCalendar, FaChartColumn,FaGear } from "react-icons/fa6";
 import { RiProgress5Line} from "react-icons/ri";
 import { BsCollectionPlayFill } from "react-icons/bs";
-
+import { IoPersonSharp } from "react-icons/io5";
 
 export interface AppPage {
   name: string;
@@ -89,6 +89,11 @@ export const applications: AppGroup[] = [
     name: "Other",
     filter: 'other',
     pages: [
+      {
+        name: "Actors",
+        link:"/actors",
+        icon: IoPersonSharp,
+      },
       {
         name: "Public Lists",
         link: "/lists",
