@@ -9,6 +9,8 @@ import { usePreview } from "../usePreview";
 interface Props {
   movieCredits: ActorMovieCredit[];
   tvCredits: ActorTvCredit[];
+  // `bare` drops the sheet-specific scroll/padding wrapper for use on a page.
+  bare?: boolean;
 }
 
 type CreditItem = {
@@ -74,7 +76,7 @@ function CreditCard({ credit }: { credit: CreditItem }) {
   );
 }
 
-function ActorCredits({ movieCredits, tvCredits }: Props) {
+function ActorCredits({ movieCredits, tvCredits, bare = false }: Props) {
   const movies: CreditItem[] = [...(movieCredits ?? [])]
     .sort(
       (a, b) =>
@@ -116,7 +118,13 @@ function ActorCredits({ movieCredits, tvCredits }: Props) {
   }
 
   return (
-    <div className="flex h-full flex-col gap-6 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6">
+    <div
+      className={
+        bare
+          ? "flex flex-col gap-6"
+          : "flex h-full flex-col gap-6 overflow-y-auto px-4 py-3 thin-scrollbar sm:px-6"
+      }
+    >
       {movies.length > 0 ? (
         <div className="flex flex-col gap-3">
           <h3 className="text-lg font-semibold text-black dark:text-white">
@@ -142,8 +150,8 @@ function ActorCredits({ movieCredits, tvCredits }: Props) {
             </span>
           </h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {tv.map((credit) => (
-              <CreditCard key={`tv-${credit.tmdbId}`} credit={credit} />
+            {tv.map((credit, idx) => (
+              <CreditCard key={`tv-${credit.tmdbId}-${idx}`} credit={credit} />
             ))}
           </div>
         </div>

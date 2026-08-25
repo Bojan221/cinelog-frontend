@@ -1,17 +1,29 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
 import { FaStar } from "react-icons/fa";
 import { SimilarMovie } from "@/types/movie";
 import { getYearFromDate } from "@/utils/helpers";
 import { formatRate } from "@/utils/formatters";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { FaArrowUpRightFromSquare } from "react-icons/fa6";
 
 function MovieMiniCard({ movie }: { movie: SimilarMovie }) {
   const POST_URL = process.env.NEXT_PUBLIC_TMDB_POST_URL;
   const year = getYearFromDate(movie.releaseDate);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const openPreview = (content: string) => {
+    const urlParams = new URLSearchParams(searchParams.toString());
+    urlParams.set("preview", content);
+    router.push(`${pathname}?${urlParams.toString()}`, { scroll: false });
+  };
 
   return (
-    <Link
-      href={`/movies/${movie.tmdbId}`}
+    <div
+      onClick={() => openPreview(`movie-${movie.tmdbId}`)}
       className="group flex w-36 shrink-0 snap-start flex-col gap-2 sm:w-40"
     >
       <div className="relative aspect-2/3 w-full overflow-hidden rounded-xl bg-black/5 ring-1 ring-black/10 transition duration-300 group-hover:shadow-lg group-hover:shadow-black/20 group-hover:ring-black/25 dark:bg-white/5 dark:ring-white/10 dark:group-hover:shadow-black/40 dark:group-hover:ring-white/25">
@@ -34,20 +46,34 @@ function MovieMiniCard({ movie }: { movie: SimilarMovie }) {
         <span className="truncate text-sm font-semibold text-black/90 dark:text-white/90">
           {movie.title}
         </span>
-        <div className="flex items-center gap-2 text-xs font-medium text-black/40 dark:text-white/40">
+        <div
+          className={`flex items-center ${!year && !movie.vote ? "justify-end" : "justify-between"} gap-2 text-xs font-medium text-black/40 dark:text-white/40`}
+        >
           {year ? <span>{year}</span> : null}
           {movie.vote ? (
             <>
               {year ? <span aria-hidden>·</span> : null}
               <span className="flex items-center gap-1">
-                <FaStar className="text-amber-500 dark:text-amber-400" size={11} />
+                <FaStar
+                  className="text-amber-500 dark:text-amber-400"
+                  size={11}
+                />
                 {formatRate(Number(movie.vote))}
               </span>
             </>
           ) : null}
+          <div className="flex items-center justify-end px-2">
+            <FaArrowUpRightFromSquare
+              className="cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/movies/${movie.tmdbId}`);
+              }}
+            />
+          </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 

@@ -62,7 +62,12 @@ function PreviewSheet() {
   const handleOpenPage = () => {
     if (!previewId) return;
     dispatch(closePreview());
-    const base = previewType === "tv" ? "series" : "movies";
+    const base =
+      previewType === "tv"
+        ? "series"
+        : previewType === "actors"
+          ? "actors"
+          : "movies";
     router.push(`/${base}/${previewId}`);
   };
 
@@ -105,9 +110,17 @@ function PreviewSheet() {
         </span>
         </div>
         <div className="flex items-center gap-3">
-          {previewType === "movie" || previewType === "tv" ? (
+          {previewType === "movie" ||
+          previewType === "tv" ||
+          previewType === "actors" ? (
             <FaArrowUpRightFromSquare
-              title={previewType === "tv" ? "Open series page" : "Open movie page"}
+              title={
+                previewType === "tv"
+                  ? "Open series page"
+                  : previewType === "actors"
+                    ? "Open actor page"
+                    : "Open movie page"
+              }
               onClick={handleOpenPage}
               className="cursor-pointer text-[18px] text-black/50 transition-colors hover:text-black dark:text-white/50 dark:hover:text-white"
             />

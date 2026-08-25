@@ -27,7 +27,7 @@ function ActorCard({ actor }: { actor: ActorListItem }) {
             alt={actor.name}
             src={`${POST_URL}${actor.profile}`}
             fill
-            sizes="(min-width: 1024px) 16vw, (min-width: 640px) 30vw, 45vw"
+            sizes="(max-width: 768px) 30vw, 140px"
             className="object-cover transition duration-300 group-hover:scale-[1.03]"
           />
         ) : (

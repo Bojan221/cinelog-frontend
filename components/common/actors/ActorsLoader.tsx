@@ -11,7 +11,7 @@ function ActorsLoader({ count = 18 }: { count?: number }) {
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+      <div className="grid w-full gap-3 grid-cols-[repeat(auto-fill,minmax(min(105px,100%),1fr))] sm:gap-4 md:grid-cols-[repeat(auto-fill,minmax(130px,1fr))]">
         {Array.from({ length: count }).map((_, i) => (
           <div key={i} className="flex flex-col gap-2">
             <div className="aspect-2/3 w-full rounded-xl bg-black/10 dark:bg-white/10" />

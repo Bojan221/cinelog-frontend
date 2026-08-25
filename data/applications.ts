@@ -1,9 +1,15 @@
 import type { IconType } from "react-icons";
 import { FaRegBookmark, FaRegHeart, FaList } from "react-icons/fa";
-import { FaRegCircleCheck, FaRegCalendar, FaChartColumn,FaGear } from "react-icons/fa6";
-import { RiProgress5Line} from "react-icons/ri";
+import {
+  FaRegCircleCheck,
+  FaRegCalendar,
+  FaChartColumn,
+  FaGear,
+} from "react-icons/fa6";
+import { RiProgress5Line } from "react-icons/ri";
 import { BsCollectionPlayFill } from "react-icons/bs";
 import { IoPersonSharp } from "react-icons/io5";
+import { MdOutlineForum } from "react-icons/md";
 
 export interface AppPage {
   name: string;
@@ -13,18 +19,18 @@ export interface AppPage {
 
 export interface AppGroup {
   name: string;
-  filter:'movies' | 'series' | 'other';
+  filter: "movies" | "series" | "other";
   pages: AppPage[];
 }
 
 export const applications: AppGroup[] = [
   {
     name: "Movies",
-    filter: 'movies',
+    filter: "movies",
     pages: [
       {
-        name:"All Movies",
-        link:"/movies/all",
+        name: "All Movies",
+        link: "/movies/all",
         icon: BsCollectionPlayFill,
       },
       {
@@ -51,11 +57,11 @@ export const applications: AppGroup[] = [
   },
   {
     name: "Series",
-    filter: 'series',
+    filter: "series",
     pages: [
       {
-        name:"All Series",
-        link:"/series/all",
+        name: "All Series",
+        link: "/series/all",
         icon: BsCollectionPlayFill,
       },
       {
@@ -87,17 +93,22 @@ export const applications: AppGroup[] = [
   },
   {
     name: "Other",
-    filter: 'other',
+    filter: "other",
     pages: [
       {
         name: "Actors",
-        link:"/actors",
+        link: "/actors",
         icon: IoPersonSharp,
       },
       {
         name: "Public Lists",
         link: "/lists",
         icon: FaList,
+      },
+      {
+        name: "Forum",
+        link: "/forum",
+        icon: MdOutlineForum ,
       },
       {
         name: "Stats",
